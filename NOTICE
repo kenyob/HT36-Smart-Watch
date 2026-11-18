@@ -1,0 +1,25 @@
+HT36-Smart-Watch: third-party notices
+
+1. tcsenpai/ht36 (https://github.com/tcsenpai/ht36), MIT License.
+   The frame envelope, subpackaging, notification, weather and GPS builders in
+   Control-Page/page-body.html are ported from its src/proto.ts. Its copyright notice
+   and permission notice apply to that ported logic.
+
+2. REAP reverse-engineering prompts (Skills/), MIT License,
+   Copyright (c) 2025 Joas Antonio dos Santos. See Skills/REAP-LICENSE.
+
+3. bleak (https://github.com/hbldh/bleak), MIT License: a runtime dependency of the
+   Python probe scripts (Control-Page/scripts/requirements.txt), installed separately.
+
+4. Leaflet (loaded from unpkg at runtime, not bundled), BSD-2-Clause.
+   Map data © OpenStreetMap contributors (ODbL), tiles from tile.openstreetmap.org.
+
+5. Protocol documentation (docs/05, docs/06) was written from static analysis of the
+   WatchLink and GloryFitPro Android apps for interoperability. No code, binaries or
+   assets from those apps are included. "GloryFitPro" and other product names belong
+   to their owners; this project is not affiliated with them.
+
+6. Tools used during development (not included): jadx (Apache-2.0), apkeep (MIT, EFF),
+   Android platform tools (Apache-2.0), Playwright (Apache-2.0), REA. References read but
+   not used as code: Gadgetbridge (AGPL-3.0), ATSDialFactory (GPL-3.0), actions-adfu (MIT),
+   jayyee/Gadgetbridge-tools. Full list with links: README.md, "Credits".

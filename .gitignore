@@ -1,0 +1,14 @@
+# Vendor binaries and decompiled vendor code: research only, never committed (see docs/internal/public-release-inventory.md)
+apk/
+jar/
+decompiled/
+# Local data: the Control-Page database and Bluetooth logs hold personal health data
+Control-Page/data/
+Control-Page/logs/
+# Secrets
+.env
+*.pem
+# Python / OS noise
+__pycache__/
+.venv/
+.DS_Store

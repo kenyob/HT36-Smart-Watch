@@ -1,0 +1,1070 @@
+
+<style>
+.hw{display:grid;gap:14px;padding:18px;max-width:1500px}
+.hw h1{margin:0;font-size:22px}.hw .lede{margin:0;color:var(--dim);max-width:80ch}
+.hw-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.hw-tabs button{min-height:38px;padding:6px 14px;border-radius:10px;background:var(--pad);color:var(--ink);border:1px solid #333;font:600 13px inherit;cursor:pointer}
+.hw-tabs button[aria-selected="true"]{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
+.hw-grid{display:grid;grid-template-columns:210px 300px minmax(0,1fr);gap:14px;align-items:start}
+.hw-card{background:var(--row);border:1px solid #2b2b2b;border-radius:14px;padding:14px;display:grid;gap:10px;min-width:0}
+.hw-card h2{margin:0;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.hw-btn{min-height:38px;padding:6px 14px;border-radius:10px;background:var(--pad);color:var(--ink);border:1px solid #3a3a3a;font:600 13px inherit;cursor:pointer;justify-self:start}
+.hw-btn.go{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
+.hw-btn:disabled{opacity:.45;cursor:not-allowed}
+.hw-st{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px}
+.hw-dot{width:10px;height:10px;border-radius:50%;background:#555}.hw-dot.on{background:var(--ok)}.hw-dot.busy{background:var(--warn)}
+.hw-kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:13px}.hw-kv span:nth-child(odd){color:var(--dim)}
+/* left nav */
+.hw-nav{display:flex;flex-direction:column;gap:3px}
+.hw-nav button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;background:transparent;color:var(--ink);border:1px solid transparent;border-radius:9px;padding:8px 10px;font:600 13px inherit;cursor:pointer}
+.hw-nav button:hover{background:var(--pad)}
+.hw-nav button[aria-current="true"]{background:var(--acc);color:var(--on-acc)}
+.hw-nav .dotstatus{width:8px;height:8px;border-radius:50%;flex:none}
+.ds-controllable,.ds-proven{background:var(--ok)}.ds-readable,.ds-partial,.ds-push{background:var(--warn)}.ds-mapped{background:#7fc8ff}.ds-unmapped,.ds-local{background:#ff8a70}
+.hw-pill.map{background:#14293d;color:#7fc8ff}
+.hw .hw-sub{margin:8px 0 0;font-size:12px;font-weight:700;color:var(--ink);border-top:1px solid #2b2b2b;padding-top:10px}
+.hw label.chk{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:13px}
+.hw .days{display:flex;gap:4px;flex-wrap:wrap}.hw .days label{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px}
+.al-row{display:grid;grid-template-columns:auto 110px 1fr auto;gap:8px;align-items:center}
+.sl-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sl-f{border:1px solid #3a3a3a;background:transparent;color:var(--ink);border-radius:999px;padding:4px 11px;font:600 12px inherit;cursor:pointer}
+.sl-f[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.sl-day{font:600 11px ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid #2b2b2b;padding:10px 0 4px}
+.sl-ent{display:grid;grid-template-columns:52px 14px minmax(0,1fr) auto;gap:8px;padding:9px 0;border-bottom:1px solid #232323;align-items:start;cursor:pointer}
+.sl-ent:hover{background:#1f1f1f}.sl-ent .tm{font:600 12px ui-monospace,Menlo,monospace;color:var(--dim)}
+.sl-ent .ic{width:12px;height:12px;border-radius:3px;margin-top:3px}.sl-ent .ic.g{background:#2dd4bf}.sl-ent .ic.v{background:#f59e0b}
+.sl-ent small{display:block;color:var(--dim);font-size:12px}.sl-ent .num{font:600 12px ui-monospace,Menlo,monospace;text-align:right}
+.sl-exp{grid-column:3/5;background:var(--bg);border:1px solid #2b2b2b;border-radius:10px;padding:10px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;cursor:default}
+.sl-exp.vn{grid-template-columns:1fr}.sl-map{height:260px;border-radius:8px;background:#0b0b0b}
+@media (max-width:700px){.sl-exp{grid-template-columns:1fr}.sl-ent{grid-template-columns:44px 12px minmax(0,1fr)}.sl-ent .num{grid-column:3;text-align:left}}
+.hw-new{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:var(--acc);color:var(--on-acc);font:700 9px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.06em;vertical-align:1px}
+.hw-nav button[aria-current="true"] .hw-new{background:var(--on-acc);color:var(--acc)}
+.hw-newnote{margin:0;font-size:12px;color:var(--ink);background:#2a1a12;border:1px solid #5a2e18;border-radius:8px;padding:6px 10px}
+.hw-nav button.sub{padding-left:24px;font-weight:500}
+.hw-rec{color:#ff8a70;font-weight:700}
+.hw-alert{background:#3d1a14;color:#ffd2c7;border:1px solid #ff8a70;border-radius:12px;padding:10px 14px;font-weight:600;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+/* pinned twin */
+.hw-stage{position:sticky;top:14px;display:grid;justify-items:center;gap:10px;padding:16px;background:radial-gradient(circle at 50% 35%,#2a1a12,var(--bg) 72%);border-radius:14px;border:1px solid #2b2b2b}
+.hw-watch{width:240px;height:296px;border-radius:44px;background:#000;border:12px solid #2c2c2c;box-shadow:0 0 0 2px #444,0 24px 48px rgba(0,0,0,.6);padding:16px;overflow:hidden;position:relative}
+.hw-watch .scr{position:absolute;inset:16px;color:#fff;font-family:"Segoe UI",system-ui,sans-serif;display:flex;flex-direction:column}
+.tw-cap{font-size:11px;color:var(--dim)}
+/* panel */
+.hw label{display:grid;gap:4px;font-size:12px;color:var(--dim)}
+.hw input,.hw select,.hw textarea{background:var(--bg);color:var(--ink);border:1px solid #3a3a3a;border-radius:8px;padding:8px 10px;font:500 14px inherit;min-width:0}
+.hw textarea{min-height:90px;resize:vertical}
+.hw .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hw .three{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hw-pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+.hw-pill.ok{background:#173d27;color:var(--ok)}.hw-pill.wip{background:#3d3214;color:var(--warn)}.hw-pill.no{background:#3d1a14;color:#ff8a70}
+.hw-note{font-size:12px;color:var(--dim);margin:0}
+.hw-warn{font-size:12px;color:var(--warn);margin:0}
+.hw-row{display:flex;gap:8px;flex-wrap:wrap}
+.face-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
+.face-tile{padding:0;border:2px solid #333;background:#000;border-radius:14px;cursor:pointer;overflow:hidden}
+.face-tile.on{border-color:var(--acc)}
+.face-mini{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:84px;color:#fff}
+.face-mini b{font-size:16px;font-weight:700}.face-mini i{font-size:9px;color:#9a9a9a;font-style:normal}
+.hw-logbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hw-log{background:#0b0b0b;border:1px solid #2b2b2b;border-radius:12px;overflow:auto;max-height:62vh}
+.hw-log table{width:100%;border-collapse:collapse;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
+.hw-log th{position:sticky;top:0;background:#141414;color:var(--dim);text-align:left;padding:6px 8px;font-weight:600;border-bottom:1px solid #2b2b2b}
+.hw-log td{padding:4px 8px;border-bottom:1px solid #1a1a1a;vertical-align:top;white-space:nowrap}
+.hw-log td.hex{white-space:normal;word-break:break-all;min-width:260px}
+.hw-log tr.tx td.dir{color:var(--acc)}.hw-log tr.rx td.dir{color:#7fc8ff}.hw-log tr.sys td{color:var(--dim)}
+.hw-log tr.err td{color:#ff8a70}
+.hw[hidden],.hw-pane[hidden],.hw-alert[hidden]{display:none!important}
+@media (max-width:1100px){.hw-grid{grid-template-columns:1fr}.hw-stage{position:static}}
+</style>
+<div class="hw">
+  <h1>HT36-GPS-Watch</h1>
+  <p class="lede">Connect to the HT36 over Bluetooth from this browser (Chrome or Edge on Mac, Windows or Android). Pick a watch app on the left; the twin in the middle mirrors it, and its data and controls are on the right. Every frame appears on the Bluetooth log. Admin only.</p>
+  <p class="hw-warn" id="hw-nosupport" hidden>This browser has no Web Bluetooth. Use Chrome or Edge on a Mac, Windows or Android device. iPhone Safari and Firefox can't connect.</p>
+  <div class="hw-alert" id="hw-findphone" hidden><span>⌚ The watch is looking for this device.</span><button class="hw-btn" type="button" id="hw-findphone-stop">Found it — stop</button></div>
+  <div class="hw-tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-pane="screens" id="tab-screens">Apps</button>
+    <button role="tab" aria-selected="false" data-pane="log" id="tab-log">Bluetooth log <span id="hw-logcount">0</span></button>
+    <button role="tab" aria-selected="false" data-pane="lab" id="tab-lab">Lab</button>
+  </div>
+
+  <div class="hw-pane" id="pane-screens">
+    <div class="hw-grid">
+      <div class="hw-card">
+        <h2>Watch apps</h2>
+        <div class="hw-nav" id="hw-nav"></div>
+        <div class="hw-note" style="display:grid;gap:3px"><span><span class="dotstatus ds-proven" style="display:inline-block;width:8px;height:8px;border-radius:50%"></span> proven on this watch</span>
+          <span><span class="dotstatus ds-mapped" style="display:inline-block;width:8px;height:8px;border-radius:50%"></span> mapped from WatchLink, untested</span>
+          <span><span class="dotstatus ds-partial" style="display:inline-block;width:8px;height:8px;border-radius:50%"></span> partly working / read-only</span>
+          <span><span class="dotstatus ds-local" style="display:inline-block;width:8px;height:8px;border-radius:50%"></span> no Bluetooth control exists</span>
+          <span><span class="hw-new" style="margin-left:0">NEW</span> new feature we're building, not a built-in watch app</span></div>
+      </div>
+
+      <div>
+        <div class="hw-stage">
+          <div class="hw-watch" aria-label="Watch twin, 240 by 296"><div class="scr" id="tw-scr"></div></div>
+          <div class="tw-cap" id="tw-cap">Twin — mirrors the selected app</div>
+        </div>
+        <div class="hw-card" style="margin-top:14px">
+          <div class="hw-st"><span class="hw-dot" id="hw-dot"></span><span id="hw-state">Not connected</span></div>
+          <div class="hw-row"><button class="hw-btn go" id="hw-connect" type="button">Connect watch</button>
+            <button class="hw-btn" id="hw-disconnect" type="button" disabled>Disconnect</button>
+            <button class="hw-btn" id="hw-refresh" type="button" disabled>Refresh</button></div>
+          <button class="hw-btn" id="hw-sweep" type="button" disabled>Log all Bluetooth info</button>
+          <p class="hw-note" id="hw-sweep-msg"></p>
+          <h3 class="hw-sub">Recording</h3>
+          <label>Test label (tags every reading, e.g. "dual-wear apple 1")<input id="rec-trial" maxlength="40" placeholder="none"></label>
+          <div class="two"><label>Poll today + battery every (min, 0 = off)<input id="rec-every" type="number" min="0" max="60" value="1"></label>
+            <label class="chk" style="align-self:end"><input type="checkbox" id="rec-loc"> also log this browser's location</label></div>
+          <p class="hw-note" id="rec-msg">Every reading the watch sends is stored in the database.</p>
+          <div class="hw-kv" id="hw-info"><span>Name</span><span>–</span><span>Model</span><span>–</span><span>Battery</span><span>–</span><span>Firmware</span><span>–</span></div>
+        </div>
+      </div>
+
+      <div class="hw-card" id="hw-panel"><!-- app panel rendered here --></div>
+    </div>
+  </div>
+
+  <div class="hw-pane" id="pane-log" hidden>
+    <div class="hw-card">
+      <div class="hw-logbar">
+        <label>Channel<select id="lg-ch"><option value="">All</option><option>34F1</option><option>34F2</option><option>35F1</option><option>35F2</option><option>FFD2</option><option>FFD3</option></select></label>
+        <label>Direction<select id="lg-dir"><option value="">Both</option><option value="tx">Sent</option><option value="rx">Received</option><option value="sys">System</option></select></label>
+        <label>Hide stream noise<select id="lg-noise"><option value="0">No</option><option value="1">Yes (34F2 C6 packets)</option></select></label>
+        <button class="hw-btn" type="button" id="lg-pause">Pause</button>
+        <button class="hw-btn" type="button" id="lg-copy">Copy as text</button>
+        <button class="hw-btn" type="button" id="lg-save">Download JSON</button>
+        <button class="hw-btn" type="button" id="lg-svc" hidden>Save to service</button>
+        <button class="hw-btn" type="button" id="lg-clear">Clear</button>
+        <span class="hw-note" id="lg-msg" role="status"></span>
+      </div>
+      <div class="hw-log"><table><thead><tr><th>Time</th><th>Dir</th><th>Channel</th><th>Bytes</th><th>Hex</th><th>Meaning</th></tr></thead><tbody id="lg-body"></tbody></table></div>
+      <p class="hw-note">Newest first. The log lives in this tab only and is cleared on reload; download it or save it to the service to keep it.</p>
+    </div>
+  </div>
+
+  <div class="hw-pane" id="pane-lab" hidden>
+    <div class="hw-card">
+      <h2>Lab: raw frames <span class="hw-pill wip">experimental</span></h2>
+      <p class="hw-warn">Writes go straight to the watch. Prefer query frames (third byte AA). The firmware-update service is not reachable from this page.</p>
+      <div class="two"><label>Channel<select id="lab-ch"><option value="34f1">34F1 (UTE frames, no response)</option><option value="35f1">35F1 (JieLi, with response)</option></select></label>
+        <label>Append XOR8 checksum<select id="lab-x"><option value="0">No</option><option value="1">Yes</option></select></label></div>
+      <label>Hex bytes<input id="lab-hex" placeholder="01 a4 aa 16" value="01 a4 aa 16"></label>
+      <button class="hw-btn go" type="button" id="lab-send">Send frame</button>
+      <h2>Experimental</h2>
+      <button class="hw-btn" type="button" data-act="settime">Set time (A3 frame: watch acks but clock may not change)</button>
+      <button class="hw-btn" type="button" data-act="notifon">Enable notifications only</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const PATHED_EARLY = window.HT36_SERVICE === true;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+  const UUID = (s) => s.length === 4 ? "0000" + s + "-0000-1000-8000-00805f9b34fb" : s;
+  const SVC = {info: 0x180a, jl: UUID("55ff"), ute: UUID("56ff"), ffd: UUID("ffd0")};  // never the OTA service e49a3001-...
+  const hex = (u8) => Array.from(u8, (b) => b.toString(16).padStart(2, "0")).join(" ");
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const xor8 = (arr) => arr.reduce((a, x) => a ^ x, 0);
+  const be4 = (n) => [(n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255];
+
+  // ---------- frame builders (ported from tcsenpai/ht36 src/proto.ts) ----------
+  const utf16be = (s) => { const o = []; for (const ch of s) { const cp = ch.codePointAt(0) || 32;
+    if (cp > 0xffff) { const c = cp - 0x10000, hi = 0xd800 + (c >> 10), lo = 0xdc00 + (c & 1023); o.push(hi >> 8, hi & 255, lo >> 8, lo & 255); }
+    else o.push(cp >> 8, cp & 255); } return o; };
+  const tlv = (tag, v) => [(tag >> 8) & 255, tag & 255, v.length & 255, ...v];
+  function subpackage(head, flag, payload, mtu = 16) {
+    const H = [(head >> 8) & 255, head & 255, (flag >> 8) & 255, flag & 255], out = []; let run = 0, sect = 0;
+    for (let i = 0; i === 0 || i < payload.length; i += mtu) { const f = [...H, sect & 255, ...payload.slice(i, i + mtu)]; run ^= xor8(f); out.push(f); sect++; }
+    out.push([...H, 0xfd, run & 255]); return out;
+  }
+  // WatchLink (decompiled/.../ks2.java, wq1.java) settings helpers
+  const set1 = (grp, op, v) => [[0x01, grp, 0xab, op, 0x01, v & 255]];        // ks2.f: 01 grp AB op 01 val
+  const raw = (...b) => [b.map((x) => x & 255)];                               // ks2.e: literal frame
+  const sect = (grp, sub, payload) => subpackage(0x0100 | grp, 0xab00 | sub, payload);  // ks2.a: 01 grp AB sub <sect> ...
+  const g1 = (tag, v) => [0xab, tag, 0x01, v & 255];                           // ks2.g
+  const be2 = (n) => [(n >>> 8) & 255, n & 255];
+  const hm = (s) => { const [h, m] = String(s || "0:0").split(":").map((x) => +x || 0); return [h & 255, m & 255]; };
+  const u16s = (s, n) => utf16be(Array.from(String(s || "")).slice(0, n).join(""));
+  const F = {
+    battery: () => [[0x01, 0xa4, 0xaa, 0x16]],
+    info: () => [[0x01, 0xa4, 0xaa, 0xaa]],
+    vibrate: () => [[0x01, 0xa5, 0xab, 0x04, 0x01, 0x01]],
+    vibrateStop: () => [[0x01, 0xa5, 0xab, 0x04, 0x01, 0x00]],
+    findPhone: () => [[0x01, 0xa5, 0xab, 0x0a, 0x01, 0x01]],  // from WatchLink: "enable find-phone"
+    findWear: () => [[0x01, 0xa5, 0xaa, 0x07]],
+    config: () => [[0x01, 0xa5, 0xaa, 0x01]],
+    languages: () => [[0x01, 0xa5, 0xaa, 0x03]],           // WatchLink "query a5/03": supported language list
+    today: () => [[0x01, 0xc3, 0xaa, 0xaa]],               // WatchLink "latest heart rate + today"
+    alarms: () => [[0x01, 0xc7, 0xaa, 0xaa]],              // WatchLink "read alarms"
+    alarmsSet: (list) => sect(0xc7, 0xab, list.flatMap((a, i) => { const b = i + 1;
+      return [0xab, 1, 2, b, b, 0xab, 2, 2, b, a.days & 127, 0xab, 3, 2, b, a.on ? 1 : 0, 0xab, 4, 3, b, a.h & 255, a.m & 255, 0xab, 5, 1, b]; })),
+    hrQuery: () => [[0x01, 0xe1, 0xaa, 0x10]],
+    // auto heart rate (WatchLink): E1 op 02 on/off, then the interval in minutes (1-60)
+    hrAuto: (min) => min > 0 ? [...set1(0xe1, 0x02, 1), ...sect(0xe1, 0xab, [...g1(2, 1), ...g1(11, Math.min(60, Math.max(1, min)))])] : set1(0xe1, 0x02, 0),
+    hrAlerts: (hiOn, hi, loOn, lo) => [...raw(1, 0xe1, 0xab, 3, 2, hiOn ? 1 : 0, hi), ...raw(1, 0xe1, 0xab, 4, 2, loOn ? 1 : 0, lo)],
+    stress: (on, min) => sect(0xe1, 0xab, [...g1(7, on ? 1 : 0), ...g1(13, Math.min(255, Math.max(1, min)))]),
+    mood: (on) => set1(0xe1, 0x0e, on ? 1 : 0),
+    spo2Query: () => [[0x01, 0xe1, 0xaa, 0x11]],
+    spo2Auto: (on) => set1(0xc4, 0x03, on ? 1 : 0),
+    spo2Alert: (on, lo) => raw(1, 0xc4, 0xab, 4, 2, on ? 1 : 0, lo),
+    sedentary: (on, every, from, to) => raw(1, 0xc4, 0xab, 1, 8, on ? 1 : 0, ...be2(every), ...hm(from), ...hm(to), 127),
+    water: (on, every, from, to) => raw(1, 0xf2, 0xab, 1, 7, on ? 1 : 0, ...hm(from), ...hm(to), ...be2(every)),
+    dnd: (mode, from, to, noVib, noMsg) => raw(1, 0xea, 0xab, 1, 8, mode === 1 ? 1 : 0, mode === 2 ? 1 : 0, ...hm(from), ...hm(to), noVib ? 1 : 0, noMsg ? 1 : 0),
+    goals: (steps, kcal, km, minutes) => sect(0xc1, 0xab, [...g1(1, 1), ...g1(2, 1), 0xab, 3, 4, ...be4(steps), 0xab, 4, 2, ...be2(kcal), 0xab, 5, 4, ...be4(Math.round(km * 1000)), 0xab, 6, 2, ...be2(minutes * 60)]),
+    profile: (p) => { const clamp = (v, a, b) => Math.min(b, Math.max(a, v)), age = clamp(new Date().getFullYear() - p.year, 5, 120);
+      return sect(0xc2, 0xab, [...g1(1, age), 0xab, 2, 4, ...be2(p.year), p.month, p.day, ...g1(3, p.male ? 1 : 0), ...g1(4, p.height), ...g1(5, 0), 0xab, 6, 4, 0, 0, 0, 0,
+        ...g1(7, clamp(Math.round(p.height * 0.548), 40, 200)), ...g1(8, clamp(Math.round(p.height * 0.405), 30, 120)), ...g1(9, p.weight), ...g1(10, p.left ? 0 : 1)]); },
+    raiseWake: (on) => set1(0xa5, 0x01, on ? 1 : 0),
+    disconnectAlert: (on) => set1(0xa5, 0x05, on ? 1 : 0),
+    screenTimeout: (s) => set1(0xa5, 0x08, s),
+    language: (i) => set1(0xa5, 0x06, i),
+    lengthUnit: (imperial) => set1(0xa5, 0x07, imperial ? 1 : 0),
+    weightUnit: (lb) => set1(0xa5, 0x09, lb ? 1 : 0),
+    tempUnit: (f) => set1(0xe0, 0x02, f ? 1 : 0),
+    timeFormat: (h24) => raw(1, 0xa3, 4, 1, 3, 8, 1, h24 ? 2 : 1),
+    callAlerts: (on) => set1(0xb2, 0x01, on ? 1 : 0),
+    aiQuery: () => [[0x01, 0xef, 0xaa, 0x02]],                 // GloryFitPro: AI voice enabled?
+    aiEnable: (on) => [[0x01, 0xef, 0xab, 0x0b, 0x01, on ? 1 : 0]],
+    smsAlerts: (on) => set1(0xc0, 0x09, on ? 1 : 0),
+    // music info (WatchLink "music info"): artist, title (UTF-16BE), state 3=playing 2=paused, volume max, volume
+    music: (o) => { const a = u16s(o.artist, 32), t = u16s(o.title, 48), vmax = Math.min(63, Math.max(1, o.vmax || 16));
+      return sect(0xe2, 0xab, [0xab, 1, a.length, ...a, 0xab, 2, t.length, ...t, ...g1(3, o.playing ? 3 : 2), ...g1(4, vmax), ...g1(5, Math.min(vmax, Math.max(0, o.vol || 0)))]); },
+    // contacts (WatchLink "contacts start/@/end/commit"): [len num][len name] per contact, UTF-16BE, offset-addressed chunks
+    contacts: (list) => { const data = list.flatMap((c) => { const n = u16s(String(c.num).replace(/[^0-9+]/g, ""), 20), nm = u16s(c.name || c.num, 40); return n.length ? [n.length, ...n, nm.length, ...nm] : []; });
+      const out = [[0x01, 0xc0, 0xab, 0x06, 0x01, 0x00]]; let run = 0;
+      for (let i = 0; i < data.length; i += 13) { const part = data.slice(i, i + 13), f = [0x01, 0xc0, 0xab, 0x07, (i >>> 8) & 255, i & 255, part.length, ...part]; run ^= xor8(f); out.push(f); }
+      out.push([0x01, 0xc0, 0xab, 0x07, 0xfd, run & 255], [0x01, 0xc0, 0xab, 0x09, 0x01, 0x01]); return out; },
+    faceInfo: () => [[0x01, 0xe3, 0xaa, 0xaa]],
+    faceTable: () => [[0x01, 0xe3, 0xaa, 0x0b]],
+    // apply/switch a face (WatchLink + prior art): 01 E3 AB 05 0A <id 4B BE> "1.0.0" <operate=1>
+    applyFace: (id) => { const b = [id.slice(0, 2), id.slice(2, 4), id.slice(4, 6)].map((h) => parseInt(h, 16));
+      return [[0x01, 0xe3, 0xab, 0x05, 0x0a, 0x00, b[0], b[1], b[2], 0x31, 0x2e, 0x30, 0x2e, 0x30, 0x01]]; },
+    gnss: () => [[0x01, 0xe9, 0xaa, 0x01]],
+    gps: (lat, lon) => [[0x01, 0xe9, 0xab, 0x02, 0x0c, ...be4(Math.floor(Date.now() / 1000) >>> 0), ...be4((Math.round(lat * 1e7) | 0) >>> 0), ...be4((Math.round(lon * 1e7) | 0) >>> 0)]],
+    // WatchLink "set time": 01 A3 01 04 <epoch s BE> 10 02 <tz hours | 0x80 if east of UTC> <tz minutes as 1/100 h>
+    setTime: () => { const ts = Math.floor(Date.now() / 1000), off = -new Date().getTimezoneOffset(), a = Math.abs(off);
+      return [[0x01, 0xa3, 0x01, 0x04, ...be4(ts), 0x10, 0x02, ((a / 60) | 0) | (off >= 0 ? 0x80 : 0), Math.floor((a % 60) * 100 / 60)]]; },
+    notifOn: () => subpackage(0x01b2, 0xabab, [0xab, 0x01, 0x01, 1, 0xab, 0x02, 0x01, 1]),
+    notify: (title, content) => { const p = [...tlv(0xab01, utf16be("HT36 Control")), ...tlv(0xab03, utf16be(content)), ...tlv(0xab04, [1]),
+      ...(title ? tlv(0xab07, utf16be(title)) : []), ...tlv(0xab08, [1]), ...tlv(0xab09, [1])]; return subpackage(0x01b0, 0xabab, p); },
+    weather: (o) => { const h = (n, w) => ((n >>> 0) & (w === 4 ? 0xffff : w === 8 ? 0xffffffff : 0xff)).toString(16).padStart(w, "0");
+      const city = Array.from(o.city, (c) => c.codePointAt(0).toString(16).padStart(4, "0")).join("");
+      let s = "AB0201" + h(o.unit, 2) + "AB0402" + h(50, 4) + "AB05" + (o.city ? (city.length / 2).toString(16).padStart(2, "0") + city : "00");
+      s += "AB0602" + h(o.cur & 0xffff, 4) + "AB0702" + h(o.hi & 0xffff, 4) + "AB0802" + h(o.lo & 0xffff, 4) + "AB0901" + h(o.icon, 2);
+      s += "AB0A01" + h(20, 2) + "AB0B04" + h(Math.floor(Date.now() / 1000), 8) + "AB0C02" + h(0, 2) + h(1, 2) + "AB0F02" + h(60, 2) + h(3, 2);
+      return subpackage(0x01e0, 0xabab, s.match(/.{2}/g).map((x) => parseInt(x, 16))); },
+  };
+
+  // ---------- frame meanings for the log ----------
+  const NAMES = {"a4:16": "battery", "a4:aa": "device info", "a5:04": "vibrate", "a5:07": "find-wear state", "a5:01": "settings group",
+    "a5:03": "languages", "a5:05": "disconnect alert", "a5:06": "language", "a5:08": "screen timeout", "a5:09": "weight unit", "a5:0a": "find-phone",
+    "a5:02": "find-phone request", "c3:aa": "today summary", "c7:aa": "alarms", "c5:ac": "history count", "c6:02": "stress", "e2:01": "music button",
+    "e1:02": "auto HR", "e1:03": "HR high alert", "e1:04": "HR low alert", "e1:0e": "mood monitor", "c4:01": "sedentary reminder", "c4:03": "auto SpO2",
+    "c4:04": "SpO2 low alert", "f2:01": "drink-water reminder", "ea:01": "do not disturb", "e0:02": "temperature unit", "b2:01": "call alerts",
+    "c0:06": "contacts start", "c0:07": "contacts data", "c0:09": "contacts commit / SMS alerts",
+    "ef:01": "watch voice button", "ef:02": "watch voice audio / AI enable", "ef:06": "watch voice stream", "ef:0b": "AI voice enable", "e8:09": "GPS track",
+    "e1:10": "HR enable", "e1:11": "SpO2 enable", "e9:02": "GPS coordinates", "e9:01": "GNSS params", "a3:04": "set time", "e3:aa": "watchface info", "e3:0b": "watchface table"};
+  const HEADS = {"01b0": "notification", "01b2": "notification settings", "01e0": "weather", "01c7": "alarms", "01e2": "music info", "01c1": "goals",
+    "01c2": "profile", "01e1": "HR/stress settings"};
+  function meaning(ch, b) {
+    if (!b.length) return "";
+    if ((ch === "35F1" || ch === "35F2") && b[0] === 0xa1) {
+      const s = String.fromCharCode(...b.slice(1).filter((x) => x >= 32 && x < 127)); return "handshake" + (s ? " · model \"" + s + "\"" : "");
+    }
+    if (b[0] !== 0x01 || b.length < 3) return "";
+    const head = hex([b[0], b[1]]).replace(" ", "");
+    if (HEADS[head] && b[2] === 0xab && b[3] === 0xab) return HEADS[head] + (b[4] === 0xfd ? " · end, xor " + b[5].toString(16).padStart(2, "0") : " · part " + b[4]);
+    const mark = {0xaa: "query", 0xab: "set", 0xac: "reply"}[b[2]] || "";
+    if (b[1] === 0xc6) return "sensor stream" + (b[4] === 0xfd ? " · checksum" : "");
+    const name = NAMES[hex([b[1]]) + ":" + hex([b[3] || 0])];
+    if (name === "battery" && ch === "34F2" && b.length >= 8) return "battery reply · " + b[7] + "%";
+    return [name || "group " + hex([b[1]]) + " op " + hex([b[3] || 0]), mark].filter(Boolean).join(" · ");
+  }
+
+  // ---------- Bluetooth log ----------
+  const LOG = [], MAX = 5000; let paused = false;
+  function log(dir, ch, bytes, note) {
+    const u8 = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes || []);
+    const e = {t: new Date(), dir, ch: ch || "", hex: hex(u8), n: u8.length, m: note || meaning(ch, Array.from(u8))};
+    LOG.push(e); if (LOG.length > MAX) LOG.shift();
+    $("hw-logcount").textContent = LOG.length;
+    if (!paused) drawRow(e, true);
+  }
+  function passes(e) {
+    const ch = $("lg-ch").value, d = $("lg-dir").value, noise = $("lg-noise").value === "1";
+    return (!ch || e.ch === ch) && (!d || e.dir === d) && !(noise && e.ch === "34F2" && e.hex.startsWith("01 c6"));
+  }
+  function drawRow(e, prepend) {
+    if (!passes(e)) return;
+    const tr = document.createElement("tr"); tr.className = e.dir;
+    const cells = [e.t.toLocaleTimeString([], {hour12: false}) + "." + String(e.t.getMilliseconds()).padStart(3, "0"),
+      {tx: "→ sent", rx: "← recv", sys: "· sys", err: "! error"}[e.dir] || e.dir, e.ch, e.n || "", e.hex, e.m];
+    cells.forEach((v, i) => { const td = document.createElement("td"); if (i === 1) td.className = "dir"; if (i === 4) td.className = "hex"; td.textContent = v; tr.appendChild(td); });
+    const body = $("lg-body"); prepend ? body.prepend(tr) : body.appendChild(tr);
+    while (body.rows.length > 1000) body.deleteRow(body.rows.length - 1);
+  }
+  function redraw() { $("lg-body").textContent = ""; LOG.slice(-1000).forEach((e) => drawRow(e, true)); }
+  ["lg-ch", "lg-dir", "lg-noise"].forEach((id) => $(id).addEventListener("change", redraw));
+  $("lg-pause").onclick = () => { paused = !paused; $("lg-pause").textContent = paused ? "Resume" : "Pause"; if (!paused) redraw(); };
+  $("lg-clear").onclick = () => { LOG.length = 0; $("hw-logcount").textContent = "0"; redraw(); };
+  const asText = () => LOG.filter(passes).map((e) => [e.t.toISOString(), e.dir, e.ch, e.hex, e.m].join("\t")).join("\n");
+  $("lg-copy").onclick = () => { navigator.clipboard.writeText(asText()).then(() => $("lg-msg").textContent = "Copied " + LOG.filter(passes).length + " lines.",
+    () => $("lg-msg").textContent = "Copy was blocked by the browser."); };
+  $("lg-save").onclick = () => { const blob = new Blob([JSON.stringify(LOG, null, 1)], {type: "application/json"}), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "ht36-bluetooth-log-" + new Date().toISOString().replace(/[:.]/g, "-") + ".json"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+  if (window.HT36_SERVICE === true) { $("lg-svc").hidden = false;
+    $("lg-svc").onclick = () => fetch(API + "log", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(LOG)})
+      .then((r) => r.json()).then((j) => $("lg-msg").textContent = j.ok ? "Saved " + LOG.length + " frames to " + j.file : "Save failed: " + j.error,
+        (err) => $("lg-msg").textContent = "Save failed: " + err.message); }
+
+  // ---------- watch state + twin render ----------
+  const S = {batt: "–", steps: "–", kcal: "–", dist: "–", hr: "–", spo2: "–", stress: "–", msg: "", model: "–", fw: "–", mac: "–",
+    wx: {city: "Home", cur: 8, hi: 11, lo: 2, unit: 0}, alarms: null, cfg: {}, langs: null, lastBtn: "",
+    music: {artist: "", title: "Nothing playing", playing: false, vol: 8, vmax: 16}, dnd: "Off"};
+  const DAYS = ["S", "M", "T", "W", "T", "F", "S"];  // WatchLink alarm UI: bit 0 = Sunday
+  const daysTxt = (d) => d === 127 ? "every day" : d === 62 ? "weekdays" : d === 65 ? "weekends" : !d ? "once" : DAYS.map((x, i) => d & (1 << i) ? x : "·").join("");
+  const p2 = (n) => String(n).padStart(2, "0");
+  const now = () => new Date();
+  const tD = () => now().toLocaleDateString([], {weekday: "short", day: "numeric", month: "short"}).toUpperCase();
+  const tT = () => now().toTimeString().slice(0, 5);
+  const row3 = (a, b, c) => `<div style="margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-size:10px;color:#aaa">${[a,b,c].map(x=>`<div><b style="display:block;color:#fff;font-size:15px">${x[0]}</b>${x[1]}</div>`).join("")}</div>`;
+  const centre = (h) => `<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px">${h}</div>`;
+  const SCREENS = {
+    "watch-faces": () => `<div style="color:#ff5a1f;font-size:11px;letter-spacing:.08em">${tD()}</div><div style="font-size:54px;font-weight:800;line-height:1.05">${tT()}</div><div style="font-size:12px;color:#ddd;max-height:60px;overflow:hidden;margin-top:4px">${esc(S.msg||"")}</div>${row3([S.steps,"steps"],[S.hr,"bpm"],[S.batt,"batt"])}`,
+    "activity": () => centre(`<div style="font-size:38px">\u{1F45F}</div><div style="font-size:42px;font-weight:800">${S.steps}</div><div style="font-size:12px;color:#9a9a9a">steps today · ${S.kcal} kcal · ${S.dist} m</div>`),
+    "heart-rate": () => centre(`<div style="color:#ff5a1f;font-size:34px">❤</div><div style="font-size:48px;font-weight:800">${S.hr}</div><div style="font-size:12px;color:#9a9a9a">bpm</div>`),
+    "blood-oxygen": () => centre(`<div style="font-size:48px;font-weight:800;color:#ff5a1f">${S.spo2}${S.spo2!=="–"?"%":""}</div><div style="font-size:12px;color:#9a9a9a">SpO₂</div>`),
+    "stress": () => centre(`<div style="font-size:48px;font-weight:800">${S.stress}</div><div style="font-size:12px;color:#9a9a9a">stress</div>`),
+    "sleep": () => centre(`<div style="font-size:30px">\u{1F634}</div><div style="font-size:12px;color:#9a9a9a">sleep history syncs from the watch</div>`),
+    "workouts-gps": () => centre(`<div style="font-size:28px">\u{1F3C3}</div><div style="font-size:12px;color:#9a9a9a">workouts + GPS tracks</div>`),
+    "weather": () => centre(`<div style="font-size:38px">⛅</div><div style="font-size:42px;font-weight:800">${S.wx.cur}°</div><div style="font-size:12px;color:#9a9a9a">H ${S.wx.hi}° L ${S.wx.lo}° · ${esc(S.wx.city)}</div>`),
+    "notifications": () => `<div style="color:#ff5a1f;font-size:12px">✉ Messages</div><div style="font-size:14px;margin-top:8px;color:#eee">${esc(S.msg||"Send a message to the wrist →")}</div>`,
+    "alarms": () => `<div style="color:#ff5a1f;font-size:12px">⏰ Alarms</div><div style="font-size:13px;margin-top:8px;line-height:1.8;color:#eee">${S.alarms === null ? "Read alarms →" : !S.alarms.length ? "No alarms set" :
+      S.alarms.map((a) => `<b style="font-size:18px">${p2(a.h)}:${p2(a.m)}</b> <span style="color:${a.on ? "#3ddc84" : "#777"}">${a.on ? "on" : "off"}</span> <span style="color:#9a9a9a;font-size:11px">${daysTxt(a.days)}</span>`).join("<br>")}</div>`,
+    "timer-stopwatch": () => centre(`<div style="font-size:40px;font-weight:800">00:00</div><div style="font-size:12px;color:#9a9a9a">runs on the watch only</div>`),
+    "music-control": () => centre(`<div style="font-size:28px">${S.music.playing ? "▶" : "❚❚"}</div><div style="font-size:15px;font-weight:700;max-height:42px;overflow:hidden">${esc(S.music.title)}</div><div style="font-size:12px;color:#9a9a9a">${esc(S.music.artist)}</div><div style="font-size:11px;color:#ff5a1f">${esc(S.lastBtn)}</div>`),
+    "find": () => centre(`<div style="font-size:38px">\u{1F4F3}</div><div style="font-size:14px;font-weight:700">Find watch</div>`),
+    "calling": () => centre(`<div style="font-size:30px">\u{1F4DE}</div><div style="font-size:12px;color:#9a9a9a">calls ring on the watch over classic Bluetooth (pair it with the phone)</div>`),
+    "gps-tracks": () => centre(`<div style="font-size:30px">\u{1F5FA}</div><div style="font-size:15px;font-weight:700">GPS tracks</div><div style="font-size:12px;color:#9a9a9a">${TR.list.length} stored${TR.rec ? " · recording" : ""}</div>`),
+    "voice-notes": () => centre(`<div style="font-size:30px">\u{1F399}</div><div style="font-size:15px;font-weight:700">${VN.rec ? "Recording…" : "Voice notes"}</div><div style="font-size:12px;color:#9a9a9a">${VN.list.length} saved</div>`),
+    "dnd": () => centre(`<div style="font-size:30px">\u{1F319}</div><div style="font-size:15px;font-weight:700">Do not disturb</div><div style="font-size:12px;color:#9a9a9a">${esc(S.dnd)}</div>`),
+    "reminders": () => centre(`<div style="font-size:30px">\u{1FA91}</div><div style="font-size:12px;color:#9a9a9a">sedentary + drink-water reminders</div>`),
+    "goals-profile": () => centre(`<div style="font-size:30px">\u{1F3AF}</div><div style="font-size:12px;color:#9a9a9a">daily goals + body profile</div>`),
+    "settings": () => { const c = S.cfg, yn = (v) => v === undefined ? "?" : v ? "on" : "off";
+      return `<div style="color:#ff5a1f;font-size:12px">⚙ Settings</div><div style="font-size:12px;margin-top:10px;line-height:1.9;color:#ddd">Raise to wake: ${yn(c[1])}<br>Disconnect alert: ${yn(c[5])}<br>Units: ${c[7] === undefined ? "?" : c[7] ? "miles" : "km"}<br>Language: ${c[6] === undefined ? "?" : c[6] === 0 ? "follow phone" : "#" + c[6]}<br>Scroll speed: no command</div>`; },
+  };
+  let current = "watch-faces";
+  function renderTwin() { $("tw-scr").innerHTML = (SCREENS[current] || SCREENS["watch-faces"])(); }
+
+  // installed faces (seed from the 2026-11-18 probe; replaced live when the watch's face table is read)
+  let FACES = ["18af79", "18a7a9", "18ab91", "c88021", "1e7fc1", "1e83a9", "809dc9", "3abe39", "a17719"];
+  let activeFace = null;
+  const faceHue = (id) => parseInt(id.slice(0, 2), 16) * 1.41 % 360;
+  function faceTile(id) {
+    const h = faceHue(id), on = id === activeFace;
+    return `<button class="face-tile${on ? " on" : ""}" data-face="${id}" title="face ${id}" type="button">
+      <span class="face-mini" style="background:radial-gradient(circle at 50% 35%,hsl(${h} 60% 22%),#000 75%);position:relative">
+        <b>10:48</b><i>${id}</i>${PATHED ? `<img src="/face-img/${id}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.remove()">` : ""}</span></button>`;
+  }
+  function renderFaces() {
+    const g = document.getElementById("face-grid"); if (!g) return;
+    g.innerHTML = FACES.map(faceTile).join("");
+    g.querySelectorAll(".face-tile").forEach((t) => t.onclick = async () => { activeFace = t.dataset.face; renderFaces();
+      const sel = $("ed-face-sel");
+      if (C.w34) { if (sel) sel.textContent = "Applying face " + activeFace + "…"; const ok = await write("34F1", F.applyFace(activeFace));
+        if (sel) sel.textContent = ok ? "Sent apply for face " + activeFace + " (unverified frame — check the watch)." : "Apply failed — see the log."; }
+      else if (sel) sel.textContent = "Selected face " + activeFace + ". Connect the watch to apply it."; });
+  }
+
+  // ---------- session-log pages: GPS tracks + voice notes (design B, the owner 2026-11-18) ----------
+  const API = PATHED_EARLY ? "/api/" : "api/";
+  const dayOf = (ts) => { const d = new Date(ts * 1000), t = new Date(); t.setHours(0, 0, 0, 0); const diff = Math.round((t - new Date(d).setHours(0, 0, 0, 0)) / 864e5);
+    return diff === 0 ? "Today" : diff === 1 ? "Yesterday" : d.toLocaleDateString([], {weekday: "short", day: "numeric", month: "short", year: "numeric"}); };
+  const hhmm = (ts) => new Date(ts * 1000).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", hour12: false});
+  const dur = (s) => { s = Math.max(0, Math.round(s || 0)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + p2(m) : m) + ":" + p2(x); };
+  const km = (m) => (m / 1000).toFixed(2) + " km";
+  function grouped(rows, tsOf, render) {
+    let out = "", last = null;
+    rows.forEach((r) => { const d = dayOf(tsOf(r)); if (d !== last) { out += `<div class="sl-day">${d}</div>`; last = d; } out += render(r); });
+    return out;
+  }
+  const SRC_LABEL = {browser: "browser reference", ht36: "HT36 watch", apple: "Apple Watch (GPX)", fitbit: "Fitbit (GPX)", strava: "Strava (GPX)", gpx: "GPX import"};
+  const TR = {filter: "", open: null, rec: null, list: []};
+  async function loadTracks() {
+    const box = $("trk-list"); if (!box) return;
+    if (window.HT36_SERVICE !== true) { box.innerHTML = `<p class="hw-note">Tracks need the Control-Page service.</p>`; return; }
+    try { TR.list = (await (await fetch(API + "tracks")).json()).tracks || []; } catch (e) { box.innerHTML = `<p class="hw-warn">Could not load tracks: ${esc(e.message)}</p>`; return; }
+    renderTwin();
+    const rows = TR.list.filter((t) => !TR.filter || t.source === TR.filter);
+    box.innerHTML = rows.length ? grouped(rows, (t) => t.started || t.created, (t) => `
+      <div class="sl-ent${TR.open === t.id ? " open" : ""}" data-trk="${t.id}"><span class="tm">${hhmm(t.started || t.created)}</span><span class="ic g"></span>
+        <div><b>${esc(t.name || "Track")}</b><small>${esc(SRC_LABEL[t.source] || t.source)}${t.trial ? " · test \"" + esc(t.trial) + "\"" : ""}${TR.rec && TR.rec.id === t.id ? " · <span style=\"color:var(--acc)\">recording…</span>" : ""}</small></div>
+        <span class="num">${km(t.distance_m)} · ${t.started && t.ended ? dur(t.ended - t.started) : "–"}</span>
+        ${TR.open === t.id ? `<div class="sl-exp" id="trk-exp"><div class="sl-map" id="trk-map"></div><div id="trk-stats" class="hw-note">Loading…</div></div>` : ""}</div>`)
+      : `<p class="hw-note">No tracks yet. Record one with <b>● Record track</b> (walk with this browser) or <b>Import GPX</b> from Apple Health, Fitbit or Strava.</p>`;
+    box.querySelectorAll("[data-trk]").forEach((el) => el.onclick = (ev) => { if (ev.target.closest("#trk-exp")) return; const id = +el.dataset.trk; TR.open = TR.open === id ? null : id; loadTracks(); });
+    if (TR.open) openTrack(TR.open);
+  }
+  function needLeaflet() {
+    if (window.L) return Promise.resolve();
+    return new Promise((ok, no) => { const c = document.createElement("link"); c.rel = "stylesheet"; c.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"; document.head.appendChild(c);
+      const s = document.createElement("script"); s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"; s.onload = ok; s.onerror = () => no(new Error("map library did not load (offline?)")); document.head.appendChild(s); });
+  }
+  function splits(pts) {
+    const out = []; let acc = 0, mark = pts[0] && pts[0].ts, next = 1000;
+    for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], R = 6371000, dl = (b.lat - a.lat) * Math.PI / 180, dn = (b.lon - a.lon) * Math.PI / 180;
+      const h = Math.sin(dl / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dn / 2) ** 2; acc += 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
+      if (acc >= next && b.ts && mark) { out.push("km " + (next / 1000) + " · " + dur(b.ts - mark)); mark = b.ts; next += 1000; } }
+    return out;
+  }
+  async function openTrack(id) {
+    try { const t = (await (await fetch(API + "track?id=" + id)).json()).track, pts = t.track_points || [], st = $("trk-stats"); if (!st) return;
+      const accs = pts.map((q) => q.acc).filter((x) => x != null), hrs = pts.map((q) => q.hr).filter((x) => x != null);
+      st.innerHTML = `<div class="hw-kv"><span>Distance</span><span>${km(t.distance_m)}</span><span>Time</span><span>${t.started && t.ended ? dur(t.ended - t.started) : "–"}</span>
+        <span>Points</span><span>${t.points}</span>${accs.length ? `<span>Avg accuracy</span><span>± ${Math.round(accs.reduce((a, b) => a + b, 0) / accs.length)} m</span>` : ""}
+        ${hrs.length ? `<span>Heart rate</span><span>avg ${Math.round(hrs.reduce((a, b) => a + b, 0) / hrs.length)} · max ${Math.max(...hrs)} bpm</span>` : ""}</div>
+        <p class="hw-note">${splits(pts).join(" &nbsp; ") || "Splits appear once a track passes 1 km."}</p>
+        <div class="hw-row"><label style="flex:1">Name<input id="trk-name" value="${esc(t.name || "")}"></label></div>
+        <div class="hw-row"><button class="hw-btn" type="button" data-act="trkRename" data-i="${id}">Rename</button><a class="hw-btn" href="${API}track?id=${id}" target="_blank" rel="noopener" style="text-decoration:none">JSON</a>
+          <button class="hw-btn" type="button" data-act="trkDelete" data-i="${id}">Delete…</button></div>`;
+      if (!pts.length) { $("trk-map").innerHTML = `<p class="hw-note" style="padding:10px">No points yet.</p>`; return; }
+      await needLeaflet(); const el = $("trk-map"); if (!el) return;
+      const map = L.map(el, {attributionControl: true}); L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap contributors"}).addTo(map);
+      const line = L.polyline(pts.map((q) => [q.lat, q.lon]), {color: "#ff5a1f", weight: 4}).addTo(map);
+      L.circleMarker([pts[0].lat, pts[0].lon], {radius: 6, color: "#3ddc84"}).addTo(map); L.circleMarker([pts[pts.length - 1].lat, pts[pts.length - 1].lon], {radius: 6, color: "#ff8a70"}).addTo(map);
+      map.fitBounds(line.getBounds(), {padding: [16, 16]});
+    } catch (e) { const st = $("trk-stats"); if (st) st.innerHTML = `<span class="hw-warn">${esc(e.message)}</span>`; }
+  }
+  async function trackRecord() {
+    if (TR.rec) { navigator.geolocation.clearWatch(TR.rec.watch); await flushTrack(); clearInterval(TR.rec.iv); log("sys", "", [], "track recording stopped"); TR.rec = null; select("gps-tracks"); return; }
+    if (!navigator.geolocation) { log("err", "", [], "this browser has no location"); return; }
+    const name = "Walk " + new Date().toLocaleString([], {month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false});
+    const j = await (await fetch(API + "tracks", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({name, source: "browser", kind: "record", trial: val("rec-trial", "").trim()})})).json();
+    if (!j.ok) { log("err", "", [], "could not start a track"); return; }
+    TR.rec = {id: j.id, buf: [], watch: navigator.geolocation.watchPosition((p) => {
+      const pt = {ts: p.timestamp / 1000, lat: p.coords.latitude, lon: p.coords.longitude, alt: p.coords.altitude, acc: p.coords.accuracy, hr: typeof S.hr === "number" ? S.hr : null};
+      if (pt.acc == null || pt.acc <= 100) TR.rec.buf.push(pt); }, (e) => log("err", "", [], "location: " + e.message), {enableHighAccuracy: true, maximumAge: 0, timeout: 20000}),
+      iv: setInterval(flushTrack, 10000)};
+    log("sys", "", [], "track recording started (" + name + ")"); TR.open = j.id; select("gps-tracks");
+  }
+  async function flushTrack() {
+    if (!TR.rec || !TR.rec.buf.length) return; const b = TR.rec.buf; TR.rec.buf = [];
+    try { await fetch(API + "track/append?id=" + TR.rec.id, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(b)}); if (current === "gps-tracks") loadTracks(); }
+    catch (e) { TR.rec.buf = b.concat(TR.rec.buf); }
+  }
+  function parseGpx(text, fallbackName) {
+    const doc = new DOMParser().parseFromString(text, "application/xml"); if (doc.querySelector("parsererror")) throw new Error("not a valid GPX file");
+    const pts = Array.from(doc.getElementsByTagName("trkpt")).concat(Array.from(doc.getElementsByTagName("rtept"))).map((n) => {
+      const g = (tag) => { const e = n.getElementsByTagName(tag)[0] || n.getElementsByTagNameNS("*", tag)[0]; return e ? e.textContent : null; };
+      const t = g("time");
+      return {lat: +n.getAttribute("lat"), lon: +n.getAttribute("lon"), alt: g("ele") === null ? null : +g("ele"), ts: t ? Date.parse(t) / 1000 : null, hr: g("hr") === null ? null : +g("hr")}; });
+    const nm = doc.getElementsByTagName("name")[0];
+    return {name: nm ? nm.textContent.trim() : fallbackName, points: pts};
+  }
+  async function importGpx(files) {
+    for (const f of files) {
+      try { const g = parseGpx(await f.text(), f.name.replace(/\.gpx$/i, "")); if (!g.points.length) throw new Error("no track points");
+        const j = await (await fetch(API + "tracks", {method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({name: g.name, source: val("trk-src", "gpx"), kind: "import", trial: val("rec-trial", "").trim(), points: g.points})})).json();
+        log("sys", "", [], "imported " + f.name + ": " + g.points.length + " points" + (j.ok ? "" : " (save failed)")); }
+      catch (e) { log("err", "", [], "GPX " + f.name + ": " + e.message); }
+    }
+    loadTracks();
+  }
+
+  // voice notes
+  const VN = {filter: "", open: null, rec: null, list: [], watchBuf: null, ai: null};
+  async function loadNotes() {
+    const box = $("vn-list"); if (!box) return;
+    if (window.HT36_SERVICE !== true) { box.innerHTML = `<p class="hw-note">Voice notes need the Control-Page service.</p>`; return; }
+    try { VN.list = (await (await fetch(API + "voice")).json()).notes || []; } catch (e) { box.innerHTML = `<p class="hw-warn">${esc(e.message)}</p>`; return; }
+    renderTwin();
+    const rows = VN.list.filter((n) => !VN.filter || n.status === VN.filter);
+    box.innerHTML = rows.length ? grouped(rows, (n) => n.created, (n) => `
+      <div class="sl-ent${VN.open === n.id ? " open" : ""}" data-vn="${n.id}"><span class="tm">${hhmm(n.created)}</span><span class="ic v"></span>
+        <div><b>${esc(n.title || "Voice note")}</b><small>${n.mic === "watch" ? "watch mic" : "Mac mic"} · ${dur(n.duration_s)} · ${n.status === "transcribed" ? "transcribed" + (n.engine ? " (" + esc(n.engine) + ")" : "") : "transcript pending"}</small></div>
+        <span class="num">${dur(n.duration_s)}</span>
+        ${VN.open === n.id ? `<div class="sl-exp vn">${n.mime === "application/octet-stream" ? `<p class="hw-warn">Raw watch audio (${n.bytes} bytes): the Opus framing still has to be decoded, so it can't play yet. It is kept for that.</p>` : `<audio controls preload="none" src="${API}voice/audio?id=${n.id}" style="width:100%"></audio>`}
+          <p class="${n.transcript ? "" : "hw-note"}" style="margin:0">${n.transcript ? esc(n.transcript) : "No transcript yet: the transcription engine (Whisper on the GPU server) isn't set up. This note will be transcribed when it is."}</p>
+          <div class="hw-row"><input id="vn-title" value="${esc(n.title || "")}" style="flex:1"><button class="hw-btn" type="button" data-act="vnRename" data-i="${n.id}">Rename</button><button class="hw-btn" type="button" data-act="vnDelete" data-i="${n.id}">Delete…</button></div></div>` : ""}</div>`)
+      : `<p class="hw-note">No voice notes yet. Press <b>● Record</b>, or press the watch's voice button if it supports it.</p>`;
+    box.querySelectorAll("[data-vn]").forEach((el) => el.onclick = (ev) => { if (ev.target.closest(".sl-exp")) return; const id = +el.dataset.vn; VN.open = VN.open === id ? null : id; loadNotes(); });
+  }
+  async function saveNote(blob, mime, mic, seconds) {
+    const title = (mic === "watch" ? "Watch note " : "Note ") + new Date().toLocaleString([], {month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false});
+    const j = await (await fetch(API + "voice?mic=" + mic + "&duration=" + (seconds || 0).toFixed(1) + "&title=" + encodeURIComponent(title) + "&trial=" + encodeURIComponent(val("rec-trial", "").trim()),
+      {method: "POST", headers: {"Content-Type": mime}, body: blob})).json();
+    log(j.ok ? "sys" : "err", "", [], j.ok ? "voice note saved (" + mic + ", " + Math.round(blob.size / 1024) + " KB)" : "voice note save failed: " + j.error);
+    if (current === "voice-notes") loadNotes();
+  }
+  async function voiceRecord() {
+    if (VN.rec) { VN.rec.mr.stop(); return; }
+    try { const stream = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true}});
+      const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "audio/webm";
+      const mr = new MediaRecorder(stream, {mimeType: mime, audioBitsPerSecond: 32000}), chunks = [], t0 = Date.now();
+      mr.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+      mr.onstop = async () => { stream.getTracks().forEach((t) => t.stop()); clearInterval(VN.rec.iv); const secs = (Date.now() - t0) / 1000; VN.rec = null; select("voice-notes");
+        await saveNote(new Blob(chunks, {type: "audio/webm"}), "audio/webm", "mac", secs); };
+      mr.start(1000); VN.rec = {mr, t0, iv: setInterval(() => { const el = $("vn-timer"); if (el) el.textContent = dur((Date.now() - t0) / 1000); }, 500)};
+      select("voice-notes");
+    } catch (e) { log("err", "", [], "microphone: " + e.message); }
+  }
+  // watch mic over BLE (GloryFitPro: 01 EF AC 01 <status> = mic pressed; 01 EF AC 02|06 <seq u16> … until FD FD; payload = len u32 + Opus)
+  function watchVoice(b) {
+    if (b[3] === 0x01) { log("sys", "", [], "watch voice button: status " + b[5]); VN.watchBuf = {t0: Date.now(), data: []}; return; }
+    if (!VN.watchBuf) VN.watchBuf = {t0: Date.now(), data: []};
+    if (b[4] === 0xfd && b[5] === 0xfd) { const d = VN.watchBuf.data, secs = (Date.now() - VN.watchBuf.t0) / 1000; VN.watchBuf = null;
+      const body = d.length > 4 ? d.slice(4) : d, ogg = body[0] === 0x4f && body[1] === 0x67 && body[2] === 0x67 && body[3] === 0x53;  // "OggS"
+      saveNote(new Blob([new Uint8Array(body)]), ogg ? "audio/ogg" : "application/octet-stream", "watch", secs); return; }
+    VN.watchBuf.data.push(...b.slice(6));
+  }
+  // ---------- verification (the owner tests each mapped control on the wrist; results live in the service DB) ----------
+  const VER = {};  // key -> "works" | "fails"
+  const vbar = (key, what) => `<div class="hw-row" data-vkey="${key}" style="align-items:center"><span class="hw-note">On the wrist, did <b>${esc(what)}</b> work?</span>
+    <button class="hw-btn" type="button" data-verify="${key}" data-ok="1">Works</button><button class="hw-btn" type="button" data-verify="${key}" data-ok="0">Doesn't</button>
+    <span class="hw-pill ${VER[key] === "works" ? "ok" : VER[key] === "fails" ? "no" : "map"}">${VER[key] || "untested"}</span></div>`;
+  const chk = (id, label, on) => `<label class="chk"><input type="checkbox" id="${id}"${on ? " checked" : ""}> ${esc(label)}</label>`;
+  const MAPPED = `<span class="hw-pill map">mapped from WatchLink · untested</span>`;
+  const NEW_NOTE = `<p class="hw-newnote"><b>New feature, in progress.</b> This is something we're building on top of the watch's own apps: the watch has no screen for it. GPS Tracks and Voice notes are the two new features so far.</p>`;
+
+  // ---------- apps registry ----------
+  // status: proven (verified on this watch) | mapped (frames from the WatchLink app, untested) | partial | readable | local (no BLE control) | unmapped
+  const APPS = [
+    {slug: "watch-faces", name: "Watch faces", status: "partial", panel: () => `
+      <h2>Watch faces <span class="hw-pill wip">install: replaces oldest</span></h2>
+      <p class="hw-note">Installed faces on the watch. The watch keeps 1 always-on + 4 downloadable faces; installing a new one replaces the oldest (no delete needed — found in the WatchLink app). Click a tile to switch to it. Tiles are placeholders until a real image exists: drop a photo of the watch showing that face into <code>watch-face-pages/face-&lt;id&gt;/photo-01.jpg</code>.</p>
+      <div id="face-grid" class="face-grid"></div>
+      <p class="hw-note" id="ed-face-sel"></p>
+      <div class="hw-row"><button class="hw-btn" data-act="faceInfo" type="button">Read face info</button><button class="hw-btn" data-act="faceTable" type="button">Read installed faces</button></div>
+      ${vbar("face-switch", "switching the face")}
+      <label>Status line to the wrist (shown as a notification)<input id="ed-face-line" maxlength="60" value="HT36 Control connected"></label>
+      <button class="hw-btn go" data-act="face" type="button">Send status line</button>
+      <p class="hw-note">Face editor + install: next build step.</p>`},
+    {slug: "activity", metrics: ["steps", "kcal", "distance_m"], name: "Activity", status: "mapped", panel: () => `
+      <h2>Activity ${MAPPED}</h2>
+      <p class="hw-note">Today's steps, calories and distance plus the latest heart rate, from the watch's day summary (WatchLink "latest heart rate + today", <code>01 C3 AA AA</code>).</p>
+      <div class="hw-kv"><span>Steps</span><span>${S.steps}</span><span>Calories</span><span>${S.kcal}</span><span>Distance</span><span>${S.dist} m</span><span>Latest HR</span><span>${S.hr}</span></div>
+      <button class="hw-btn go" data-act="today" type="button">Read today</button>${vbar("today", "the step count matching the watch")}`},
+    {slug: "heart-rate", metrics: ["hr"], name: "Heart rate", status: "mapped", panel: () => `
+      <h2>Heart rate ${MAPPED}</h2>
+      <p class="hw-note">Latest bpm comes from the day summary. Auto-measure and alerts use the WatchLink settings frames (group E1).</p>
+      <div class="hw-kv"><span>Latest</span><span>${S.hr} bpm</span></div>
+      <div class="hw-row"><button class="hw-btn" data-act="today" type="button">Read latest HR</button><button class="hw-btn" data-act="hrQuery" type="button">Read auto-HR state</button></div>
+      <h3 class="hw-sub">Auto-measure</h3>
+      <div class="two"><label>Every (minutes, 0 = off)<input id="ed-hr-min" type="number" min="0" max="60" value="10"></label></div>
+      <button class="hw-btn go" data-act="hrAuto" type="button">Apply auto-measure</button>${vbar("hr-auto", "the auto-HR interval")}
+      <h3 class="hw-sub">Alerts</h3>
+      <div class="two">${chk("ed-hr-hion", "High alert", true)}<label>Above (bpm)<input id="ed-hr-hi" type="number" min="100" max="220" value="150"></label>
+        ${chk("ed-hr-loon", "Low alert", false)}<label>Below (bpm)<input id="ed-hr-lo" type="number" min="30" max="80" value="45"></label></div>
+      <button class="hw-btn" data-act="hrAlerts" type="button">Apply HR alerts</button>${vbar("hr-alerts", "the HR alert setting")}`},
+    {slug: "blood-oxygen", metrics: ["spo2"], name: "Blood oxygen", status: "mapped", panel: () => `
+      <h2>Blood oxygen (SpO₂) ${MAPPED}</h2>
+      <p class="hw-note">Continuous SpO₂ and a low-oxygen alert (WatchLink group C4).</p>
+      <div class="hw-row"><button class="hw-btn" data-act="spo2Query" type="button">Read auto-SpO2 state</button><button class="hw-btn" data-act="spo2On" type="button">Continuous on</button><button class="hw-btn" data-act="spo2Off" type="button">Continuous off</button></div>
+      ${vbar("spo2-auto", "continuous SpO₂ on/off")}
+      <div class="two">${chk("ed-sp-on", "Low alert", true)}<label>Below (%)<input id="ed-sp-lo" type="number" min="80" max="95" value="90"></label></div>
+      <button class="hw-btn" data-act="spo2Alert" type="button">Apply SpO₂ alert</button>${vbar("spo2-alert", "the SpO₂ alert")}`},
+    {slug: "stress", metrics: ["stress", "mood"], name: "Stress", status: "mapped", panel: () => `
+      <h2>Stress ${MAPPED}</h2>
+      <p class="hw-note">Turn stress (and mood) monitoring on. Stress readings arrive as <code>01 C6 AC 02</code> pushes and show here; full history comes with history sync.</p>
+      <div class="hw-kv"><span>Latest</span><span>${S.stress}</span></div>
+      <div class="two">${chk("ed-st-on", "Stress monitor", true)}<label>Every (minutes)<input id="ed-st-min" type="number" min="1" max="255" value="30"></label></div>
+      <div class="hw-row"><button class="hw-btn go" data-act="stress" type="button">Apply stress monitor</button><button class="hw-btn" data-act="moodOn" type="button">Mood monitor on</button><button class="hw-btn" data-act="moodOff" type="button">Mood off</button></div>
+      ${vbar("stress", "stress monitoring")}`},
+    {slug: "sleep", metrics: ["sleep_min", "sleep_deep_min", "sleep_light_min", "sleep_awake_min"], name: "Sleep", status: "readable", panel: () => `
+      <h2>Sleep <span class="hw-pill wip">history sync — next build step</span></h2><p class="hw-note">Sleep comes from the watch's history records (WatchLink history frames <code>01 C6 AA 01</code>). History sync + charts are the next phase.</p>`},
+    {slug: "workouts-gps", metrics: ["gps", "gps_push", "workout"], name: "Workouts + GPS", status: "partial", panel: () => `
+      <h2>Workouts + GPS <span class="hw-pill ok">push proven</span> <span class="hw-pill no">track download — later phase</span></h2>
+      <p class="hw-note">GNSS is GPS+BeiDou+Galileo. Pushing a location works; downloading recorded tracks is a later phase.</p>
+      <div class="hw-row"><button class="hw-btn" data-act="gnss" type="button">Read GNSS params</button></div>
+      <div class="two"><label>Latitude<input id="ed-g-lat" type="number" step="0.000001" value="42.479"></label><label>Longitude<input id="ed-g-lon" type="number" step="0.000001" value="-71.152"></label></div>
+      <div class="hw-row"><button class="hw-btn" data-act="gpshere" type="button">Use this browser's location</button><button class="hw-btn go" data-act="gps" type="button">Push location to watch</button></div>
+      <p class="hw-note"><a href="${PATHED_EARLY ? "/workouts-gps/tracks" : "#workouts-gps/tracks"}" data-go="gps-tracks" style="color:var(--acc)">GPS tracks →</a> every recorded and imported track, on a map.</p>`},
+    {slug: "gps-tracks", path: "workouts-gps/tracks", parent: "workouts-gps", isNew: true, name: "GPS tracks", status: "mapped", panel: () => `
+      <h2>GPS tracks <span class="hw-new">NEW</span> <span class="hw-pill map">browser + GPX now · watch tracks later</span></h2>
+      ${NEW_NOTE}
+      <p class="hw-note">Every track we store, by day. Record a reference track by walking with this browser, or import GPX from Apple Health, Fitbit or Strava. The watch's own tracks (<code>01 E8 AA 09</code>) join this list once that download is built. Tag a test in the Recording box to group a dual-wear run.</p>
+      <div class="sl-bar">${["", "browser", "gpx", "apple", "fitbit", "strava", "ht36"].map((s) => `<button class="sl-f" type="button" data-trkf="${s}" aria-pressed="${TR.filter === s}">${s ? esc(SRC_LABEL[s] || s) : "All sources"}</button>`).join("")}</div>
+      <div class="sl-bar"><button class="hw-btn go" type="button" data-act="trkRecord">${TR.rec ? "■ Stop recording" : "● Record track"}</button>
+        <label>Import as<select id="trk-src"><option value="gpx">GPX</option><option value="apple">Apple Watch</option><option value="fitbit">Fitbit</option><option value="strava">Strava</option></select></label>
+        <button class="hw-btn" type="button" data-act="trkImport">Import GPX…</button><input type="file" id="trk-file" accept=".gpx,application/gpx+xml" multiple hidden>
+        ${TR.rec ? `<span class="hw-rec">recording · ${TR.rec.buf.length} points waiting</span>` : ""}</div>
+      <p class="hw-note">Recording uses this browser's location (best on a phone or laptop outdoors). The page must stay open while you walk.</p>
+      <div id="trk-list"><p class="hw-note">Loading…</p></div>`},
+    {slug: "weather", name: "Weather", status: "proven", panel: () => `
+      <h2>Weather <span class="hw-pill ok">proven</span></h2>
+      <p class="hw-note">Push current/high/low and an icon to the wrist. When the watch asks for weather (<code>01 E0 AC 02</code>) the page answers with these values automatically.</p>
+      <label>City or label<input id="ed-w-city" maxlength="16" value="${esc(S.wx.city)}"></label>
+      <div class="three"><label>Now<input id="ed-w-cur" type="number" value="${S.wx.cur}"></label><label>High<input id="ed-w-hi" type="number" value="${S.wx.hi}"></label><label>Low<input id="ed-w-lo" type="number" value="${S.wx.lo}"></label></div>
+      <div class="two"><label>Unit<select id="ed-w-unit"><option value="0">°C</option><option value="1">°F</option></select></label><label>Icon code<input id="ed-w-icon" type="number" min="0" max="40" value="1"></label></div>
+      <button class="hw-btn go" data-act="weather" type="button">Send weather</button>`},
+    {slug: "notifications", name: "Notifications", status: "proven", panel: () => `
+      <h2>Notifications <span class="hw-pill ok">proven</span></h2>
+      <p class="hw-note">Enable once, then push text; long text is split into pages. This is the path assistant replies will use.</p>
+      <label>Title<input id="ed-chat-title" maxlength="24" value="Assistant"></label>
+      <label>Message<textarea id="ed-chat-body">Standup moved to 10:30.</textarea></label>
+      <label>Characters per page<input id="ed-chat-page" type="number" min="20" max="200" value="90"></label>
+      <button class="hw-btn go" data-act="chat" type="button">Send to watch</button>
+      <h3 class="hw-sub">Alert types ${MAPPED}</h3>
+      <div class="hw-row"><button class="hw-btn" data-act="callOn" type="button">Call alerts on</button><button class="hw-btn" data-act="callOff" type="button">Call alerts off</button>
+        <button class="hw-btn" data-act="smsOn" type="button">SMS alerts on</button><button class="hw-btn" data-act="smsOff" type="button">SMS alerts off</button></div>${vbar("alert-types", "call/SMS alert toggles")}`},
+    {slug: "voice-notes", isNew: true, name: "Voice notes", status: "mapped", panel: () => `
+      <h2>Voice notes <span class="hw-new">NEW</span> <span class="hw-pill map">Mac mic works · watch mic needs the AI feature</span></h2>
+      ${NEW_NOTE}
+      <p class="hw-note">Record with this Mac's mic, or press the watch's voice button: if the watch has the AI feature it streams its mic over Bluetooth and the note saves itself. Audio is kept (WebM/Opus) for local transcription later (Whisper on the GPU server, not set up yet).</p>
+      <div class="sl-bar">${[["", "All"], ["pending", "Pending"], ["transcribed", "Transcribed"]].map(([v, l]) => `<button class="sl-f" type="button" data-vnf="${v}" aria-pressed="${VN.filter === v}">${l}</button>`).join("")}</div>
+      <div class="sl-bar"><button class="hw-btn go" type="button" data-act="vnRecord">${VN.rec ? "■ Stop and save" : "● Record (Mac mic)"}</button>${VN.rec ? `<span class="hw-rec">● <span id="vn-timer">0:00</span></span>` : ""}
+        <button class="hw-btn" type="button" data-act="aiQuery">Read watch voice feature</button><button class="hw-btn" type="button" data-act="aiOn">Turn on watch voice button</button>
+        <span class="hw-note">${VN.ai === null ? "Watch voice feature: not read yet" : "Watch voice feature: " + (VN.ai ? "on" : "off")}</span></div>
+      ${vbar("watch-voice", "the watch voice button saving a note")}
+      <div id="vn-list"><p class="hw-note">Loading…</p></div>`},
+    {slug: "alarms", name: "Alarms", status: "mapped", panel: () => { const list = S.alarms || [];
+      return `<h2>Alarms ${MAPPED}</h2>
+      <p class="hw-note">Read the alarms on the watch, edit them here, then write the whole list back (WatchLink <code>01 C7</code>). Days: tick none for a one-off alarm.</p>
+      <button class="hw-btn" data-act="alarms" type="button">Read alarms from the watch</button>
+      <div id="al-list" style="display:grid;gap:8px">${list.map((a, i) => alarmRow(a, i)).join("") || `<p class="hw-note">${S.alarms === null ? "Not read yet." : "No alarms on the watch."}</p>`}</div>
+      <div class="hw-row"><button class="hw-btn" data-act="alarmAdd" type="button">Add alarm</button><button class="hw-btn go" data-act="alarmsWrite" type="button">Write alarms to watch</button></div>
+      ${vbar("alarms", "the alarm list")}`; }},
+    {slug: "timer-stopwatch", name: "Timer & stopwatch", status: "local", panel: () => `
+      <h2>Timer & stopwatch <span class="hw-pill no">watch-only</span></h2><p class="hw-note">Neither WatchLink nor its protocol has a timer command: the timer runs entirely on the watch.</p>`},
+    {slug: "music-control", name: "Music control", status: "mapped", panel: () => `
+      <h2>Music control ${MAPPED}</h2>
+      <p class="hw-note">The watch's music screen shows what you push here, and its buttons (play, pause, previous, next, volume) arrive as <code>01 E2 … 01 02 &lt;cmd&gt;</code>. With "Control this Mac" on, the service passes them to Music or Spotify.</p>
+      <div class="two"><label>Artist<input id="ed-m-artist" maxlength="32" value="${esc(S.music.artist)}"></label><label>Title<input id="ed-m-title" maxlength="48" value="${esc(S.music.title)}"></label></div>
+      <div class="three">${chk("ed-m-play", "Playing", S.music.playing)}<label>Volume<input id="ed-m-vol" type="number" min="0" max="16" value="${S.music.vol}"></label><label>Mac app<select id="ed-m-app"><option>Music</option><option>Spotify</option></select></label></div>
+      ${chk("ed-m-mac", "Control this Mac from the watch buttons", true)}
+      <div class="hw-row"><button class="hw-btn" data-act="musicNow" type="button">Get now playing from Mac</button><button class="hw-btn go" data-act="music" type="button">Push to watch</button></div>
+      <p class="hw-note">Last watch button: <b id="m-last">${esc(S.lastBtn || "none yet")}</b></p>${vbar("music", "the music screen and buttons")}`},
+    {slug: "find", name: "Find", status: "partial", panel: () => `
+      <h2>Find <span class="hw-pill ok">vibrate proven</span> ${MAPPED}</h2>
+      <p class="hw-note">Buzz the watch. With find-phone enabled, "Find phone" on the watch makes this page ring (it shows a banner and beeps).</p>
+      <div class="hw-row"><button class="hw-btn go" data-act="vibrate" type="button">Vibrate the watch</button><button class="hw-btn" data-act="vibrateStop" type="button">Stop</button><button class="hw-btn" data-act="findPhone" type="button">Enable find-phone</button><button class="hw-btn" data-act="findWear" type="button">Read wear state</button></div>
+      ${vbar("find-phone", "find-phone ringing this page")}`},
+    {slug: "calling", name: "Calling + contacts", status: "mapped", panel: () => `
+      <h2>Calling + contacts ${MAPPED}</h2>
+      <p class="hw-note">Call audio uses classic Bluetooth (HFP) between the watch and a phone; a browser can't carry it. This page can push the contact list the watch's dialer shows (WatchLink "contacts", <code>01 C0</code>). One contact per line: <code>Name, number</code>.</p>
+      <label>Contacts<textarea id="ed-contacts">The owner, +15555550100</textarea></label>
+      <button class="hw-btn go" data-act="contacts" type="button">Push contacts to watch</button>${vbar("contacts", "the contact list on the watch")}`},
+    {slug: "dnd", name: "Do not disturb", status: "mapped", panel: () => `
+      <h2>Do not disturb ${MAPPED}</h2>
+      <div class="two"><label>Mode<select id="ed-dnd-mode"><option value="0">Off</option><option value="1">All day</option><option value="2">Scheduled</option></select></label><span></span>
+        <label>From<input id="ed-dnd-from" type="time" value="22:00"></label><label>To<input id="ed-dnd-to" type="time" value="07:00"></label></div>
+      ${chk("ed-dnd-novib", "No vibration", true)}${chk("ed-dnd-nomsg", "No message alerts", true)}
+      <button class="hw-btn go" data-act="dnd" type="button">Apply do not disturb</button>${vbar("dnd", "do not disturb")}`},
+    {slug: "reminders", name: "Reminders", status: "mapped", panel: () => `
+      <h2>Reminders ${MAPPED}</h2>
+      <h3 class="hw-sub">Sedentary (move) reminder</h3>
+      <div class="three">${chk("ed-sed-on", "On", true)}<label>Every (min)<input id="ed-sed-int" type="number" min="15" max="240" value="60"></label><span></span>
+        <label>From<input id="ed-sed-from" type="time" value="09:00"></label><label>To<input id="ed-sed-to" type="time" value="21:00"></label></div>
+      <button class="hw-btn go" data-act="sedentary" type="button">Apply sedentary reminder</button>${vbar("sedentary", "the move reminder")}
+      <h3 class="hw-sub">Drink-water reminder</h3>
+      <div class="three">${chk("ed-wat-on", "On", false)}<label>Every (min)<input id="ed-wat-int" type="number" min="15" max="240" value="90"></label><span></span>
+        <label>From<input id="ed-wat-from" type="time" value="09:00"></label><label>To<input id="ed-wat-to" type="time" value="21:00"></label></div>
+      <button class="hw-btn go" data-act="water" type="button">Apply drink-water reminder</button>${vbar("water", "the drink-water reminder")}`},
+    {slug: "goals-profile", name: "Goals + profile", status: "mapped", panel: () => `
+      <h2>Goals + profile ${MAPPED}</h2>
+      <h3 class="hw-sub">Daily goals</h3>
+      <div class="two"><label>Steps<input id="ed-go-steps" type="number" value="8000"></label><label>Calories<input id="ed-go-kcal" type="number" value="400"></label>
+        <label>Distance (km)<input id="ed-go-km" type="number" value="5"></label><label>Active minutes<input id="ed-go-min" type="number" value="30"></label></div>
+      <button class="hw-btn go" data-act="goals" type="button">Apply goals</button>${vbar("goals", "the daily goals")}
+      <h3 class="hw-sub">Body profile (used for calories and stride)</h3>
+      <div class="three"><label>Birth year<input id="ed-pf-y" type="number" value="1975"></label><label>Month<input id="ed-pf-m" type="number" min="1" max="12" value="1"></label><label>Day<input id="ed-pf-d" type="number" min="1" max="31" value="1"></label>
+        <label>Height (cm)<input id="ed-pf-h" type="number" value="178"></label><label>Weight (kg)<input id="ed-pf-w" type="number" value="80"></label><span></span></div>
+      ${chk("ed-pf-male", "Male", true)}${chk("ed-pf-left", "Worn on the left wrist", true)}
+      <button class="hw-btn go" data-act="profile" type="button">Apply profile</button>${vbar("profile", "the profile")}`},
+    {slug: "settings", name: "Settings", status: "mapped", panel: () => { const c = S.cfg;
+      return `<h2>Settings ${MAPPED}</h2>
+      <p class="hw-note">"Read settings" reads the watch's settings group (<code>01 A5 AA 01</code>); the twin shows what came back. Dial scroll-speed: WatchLink has no command for it.</p>
+      <div class="hw-row"><button class="hw-btn" data-act="config" type="button">Read settings</button><button class="hw-btn" data-act="languages" type="button">Read languages</button><button class="hw-btn go" data-act="settime" type="button">Sync time from this computer</button></div>
+      ${vbar("set-time", "the clock syncing")}
+      <h3 class="hw-sub">Display</h3>
+      <div class="two">${chk("ed-s-raise", "Raise to wake", !!c[1])}${chk("ed-s-disc", "Disconnect alert", !!c[5])}
+        <label>Screen timeout<select id="ed-s-to">${[5, 10, 15, 20, 30].map((s) => `<option value="${s}"${s === 15 ? " selected" : ""}>${s} s</option>`).join("")}</select></label>
+        <label>Time format<select id="ed-s-24"><option value="1">24 hour</option><option value="0">12 hour</option></select></label></div>
+      <div class="hw-row"><button class="hw-btn" data-act="raise" type="button">Apply raise to wake</button><button class="hw-btn" data-act="disc" type="button">Apply disconnect alert</button>
+        <button class="hw-btn" data-act="screenTo" type="button">Apply timeout</button><button class="hw-btn" data-act="timeFmt" type="button">Apply time format</button></div>${vbar("display", "the display settings")}
+      <h3 class="hw-sub">Units + language</h3>
+      <div class="three"><label>Distance<select id="ed-s-len"><option value="0">km</option><option value="1"${c[7] ? " selected" : ""}>miles</option></select></label>
+        <label>Weight<select id="ed-s-wt"><option value="0">kg</option><option value="1">lb</option></select></label>
+        <label>Temperature<select id="ed-s-tmp"><option value="0">°C</option><option value="1">°F</option></select></label></div>
+      <label>Language<select id="ed-s-lang">${LANGS.map(([i, n]) => `<option value="${i}"${c[6] === i ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+      <div class="hw-row"><button class="hw-btn" data-act="units" type="button">Apply units</button><button class="hw-btn" data-act="lang" type="button">Apply language</button></div>${vbar("units", "units and language")}`; }},
+  ];
+  // WatchLink language table (ks2.a) — index is what the watch stores
+  const LANGS = [[0, "Follow phone"], [2, "English"], [5, "German"], [6, "Spanish"], [7, "French"], [8, "Italian"], [9, "Portuguese"], [15, "Dutch"], [14, "Russian"], [13, "Polish"], [4, "Japanese"], [3, "Korean"], [1, "Chinese (simplified)"]];
+  function alarmRow(a, i) {
+    return `<div class="al-row" data-al="${i}"><label class="chk"><input type="checkbox" data-al-on${a.on ? " checked" : ""}> on</label><input type="time" data-al-t value="${p2(a.h)}:${p2(a.m)}">
+      <span class="days">${DAYS.map((d, k) => `<label>${d}<input type="checkbox" data-al-d="${k}"${a.days & (1 << k) ? " checked" : ""}></label>`).join("")}</span>
+      <button class="hw-btn" type="button" data-act="alarmDel" data-i="${i}">Remove</button></div>`;
+  }
+  function alarmsFromForm() {
+    return Array.from(document.querySelectorAll("#al-list .al-row")).map((r) => { const [h, m] = r.querySelector("[data-al-t]").value.split(":").map((x) => +x || 0);
+      let days = 0; r.querySelectorAll("[data-al-d]").forEach((c) => { if (c.checked) days |= 1 << +c.dataset.alD; });
+      return {on: r.querySelector("[data-al-on]").checked, h, m, days}; });
+  }
+  const byslug = Object.fromEntries(APPS.map((a) => [a.slug, a]));
+
+  function buildNav() {
+    const nav = $("hw-nav"); nav.innerHTML = "";
+    APPS.forEach((a) => {
+      const b = document.createElement("button"); b.type = "button"; b.dataset.slug = a.slug; if (a.parent) b.className = "sub";
+      b.innerHTML = `<span>${esc(a.name)}${a.isNew ? '<span class="hw-new">NEW</span>' : ""}</span><span class="dotstatus ds-${a.status}" title="${a.status}"></span>`;
+      b.onclick = () => { select(a.slug); go(a.slug); }; nav.appendChild(b);
+    });
+  }
+  function select(slug) {
+    current = slug;
+    document.querySelectorAll("#hw-nav button").forEach((b) => b.setAttribute("aria-current", b.dataset.slug === slug));
+    $("hw-panel").innerHTML = byslug[slug].panel() + (byslug[slug].metrics ? '<div id="mx-log"></div>' : "");
+    showLogged();
+    $("tw-cap").textContent = "Twin — " + byslug[slug].name;
+    renderTwin();
+    if (slug === "watch-faces") renderFaces();
+    if (slug === "gps-tracks") loadTracks();
+    if (slug === "voice-notes") loadNotes();
+  }
+
+  // ---------- connection ----------
+  const C = {dev: null, w34: null, w35: null, busy: false};
+  const setState = (txt, cls) => { $("hw-state").textContent = txt; $("hw-dot").className = "hw-dot" + (cls ? " " + cls : ""); };
+  const enable = (on) => { $("hw-disconnect").disabled = !on; $("hw-refresh").disabled = !on; $("hw-connect").disabled = on; $("hw-sweep").disabled = !on; };
+  // Full read sweep: every safe query, then save the whole log to the service DB in one shot.
+  async function sweep() {
+    const msg = $("hw-sweep-msg"); msg.textContent = "Reading every channel…";
+    try {
+      await write("35F1", [[0xa1]]); await sleep(1200);
+      for (const fr of [F.battery(), F.info(), F.config(), F.findWear(), F.hrQuery(), F.spo2Query(), F.gnss(), F.faceInfo(), F.faceTable(), F.today(), F.alarms(), F.languages(), F.aiQuery()]) { await write("34F1", fr); await sleep(1500); }
+      await sleep(1500);
+      if (window.HT36_SERVICE === true) {
+        const j = await (await fetch(API + "log?note=full+sweep&kind=probe", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(LOG)})).json();
+        if (j.ok) { const info = {firmware: S.fw, model: S.model, battery: String(S.batt)}; fetch(API + "watch", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(info)}).catch(() => {});
+          msg.textContent = "Logged " + j.frames + " frames to the database (session " + j.session + "). Claude can read it now."; }
+        else msg.textContent = "Save failed: " + j.error;
+      } else msg.textContent = "Read " + LOG.length + " frames (open via the service to save them).";
+    } catch (err) { msg.textContent = "Sweep error: " + err.message; }
+  }
+  function info(k, v) { const kv = $("hw-info").children; for (let i = 0; i < kv.length; i += 2) if (kv[i].textContent === k) kv[i + 1].textContent = v; }
+  async function sub(svc, uuid, ch) {
+    try { const c = await svc.getCharacteristic(uuid); await c.startNotifications();
+      c.addEventListener("characteristicvaluechanged", (ev) => onRx(ch, new Uint8Array(ev.target.value.buffer)));
+      log("sys", ch, [], "subscribed"); return c; }
+    catch (err) { log("err", ch, [], "subscribe failed: " + err.message); return null; }
+  }
+  // ---------- receive: reassemble sectioned replies, then decode (layouts from WatchLink wq1.f) ----------
+  // Sectioned replies are 01 <grp> <AA|AC> <op> <sect 00,01..> <payload…> and end with 01 <grp> <AA|AC> <op> FD <xor>.
+  const SECTIONED = new Set(["a4:aa:aa", "a5:aa:01", "a5:aa:03", "c3:aa:aa", "c7:aa:aa"]);
+  const ASM = {};
+  const recs = (p) => { const out = {}; let i = 0; while (i + 3 <= p.length) { if (p[i] !== 0xaa) { i++; continue; } const t = p[i + 1], n = p[i + 2]; out[t] = p.slice(i + 3, i + 3 + n); i += 3 + n; } return out; };
+  const tlv2 = (p) => { const out = {}; let i = 0; while (i + 2 <= p.length) { const t = p[i], n = p[i + 1]; out[t] = p.slice(i + 2, i + 2 + n); i += 2 + n; } return out; };
+  const num = (a) => (a || []).reduce((v, x) => v * 256 + x, 0);
+  const str = (a) => String.fromCharCode(...(a || []).filter((x) => x >= 32 && x < 127));
+  const MUSIC_BTN = {1: "play", 2: "pause", 3: "previous", 4: "next", 5: "volup", 6: "voldown"};
+  function decode(key, p) {
+    if (key === "a4:aa:aa") { const r = recs(p);
+      if (r[1]) { S.mac = r[1].map((x) => x.toString(16).padStart(2, "0")).join(":").toUpperCase(); }
+      if (r[2]) { S.model = str(r[2]); info("Model", S.model); }
+      if (r[0x15]) { S.fw = str(r[0x15]); info("Firmware", S.fw); }
+      if (r[0x16]) { const t = tlv2(r[0x16]); if (t[1]) { S.batt = t[1][0]; rec("battery", S.batt, "%", "live"); info("Battery", S.batt + "%" + (t[2] && t[2][0] ? " · charging" : "")); } }
+      saveWatch({model: S.model, firmware: S.fw, battery: String(S.batt)}); log("sys", "", [], "device info: model " + S.model + ", firmware " + S.fw + ", battery " + S.batt + "%"); }
+    if (key === "a5:aa:01") { const t = tlv2(p); S.cfg = {}; Object.keys(t).forEach((k) => S.cfg[+k] = t[k][0]);
+      saveWatch({settings: JSON.stringify(S.cfg)}); log("sys", "", [], "settings group: " + JSON.stringify(S.cfg) + " (1 raise-to-wake, 5 disconnect alert, 6 language, 7 length unit)"); }
+    if (key === "a5:aa:03") { S.langs = p.slice(); log("sys", "", [], "watch languages: " + p.join(", ")); }
+    if (key === "c3:aa:aa") { const r = recs(p);
+      const hrTs = r[3] && r[3].length === 4 ? num(r[3]) : undefined;   // when the watch took that HR reading
+      if (r[2] && r[2][0] >= 30 && r[2][0] < 221) { S.hr = r[2][0]; rec("hr", S.hr, "bpm", "summary", hrTs); }
+      if (r[12]) { const t = tlv2(r[12]); if (t[5]) S.steps = num(t[5]); if (t[1]) S.kcal = num(t[1]); if (t[2]) S.dist = num(t[2]);
+        rec("steps", t[5] && S.steps, "steps today", "summary"); rec("kcal", t[1] && S.kcal, "kcal today", "summary"); rec("distance_m", t[2] && S.dist, "m today", "summary"); }
+      saveWatch({steps: String(S.steps), hr: String(S.hr), kcal: String(S.kcal), dist: String(S.dist)}); log("sys", "", [], "today: " + S.steps + " steps, " + S.kcal + " kcal, " + S.dist + " m, latest HR " + S.hr); }
+    if (key === "c7:aa:aa") { const list = []; let cur = null, i = 0;
+      while (i + 3 <= p.length) { if (p[i] !== 0xaa) { i++; continue; } const t = p[i + 1], n = p[i + 2], v = p.slice(i + 3, i + 3 + n); if (!n) break;
+        if (t === 1) { cur = {on: false, h: 0, m: 0, days: 0}; list.push(cur); } else if (cur && t === 2) cur.days = v[0]; else if (cur && t === 3) cur.on = !!v[0]; else if (cur && t === 4) { cur.h = v[0]; cur.m = v[1] || 0; }
+        i += 3 + n; }
+      S.alarms = list; log("sys", "", [], "alarms on the watch: " + (list.length ? list.map((a) => p2(a.h) + ":" + p2(a.m) + (a.on ? " on" : " off")).join(", ") : "none")); }
+    if (current === "settings" || current === "alarms" || current === "activity" || current === "heart-rate") select(current); else renderTwin();
+  }
+  function onRx(ch, u8) {
+    log("rx", ch, u8);
+    const b = Array.from(u8);
+    if (ch === "35F2" && b[0] === 0xa1) { const s = str(b.slice(1)); if (s) { S.fw = s; info("Firmware", s); } return; }
+    if (ch !== "34F2" || b[0] !== 0x01 || b.length < 4) return;
+    const key = hex([b[1], b[2], b[3]]).replace(/ /g, ":");
+    if (SECTIONED.has(key)) { if (b[4] === 0xfd) { const p = ASM[key] || []; delete ASM[key]; decode(key, p); } else { if (b[4] === 0 || !ASM[key]) ASM[key] = []; ASM[key].push(...b.slice(5)); } return; }
+    if (b[1] === 0xa4 && b[2] === 0xaa && b[3] === 0x16 && b.length >= 8) { S.batt = b[7]; rec("battery", b[7], "%", "live"); info("Battery", b[7] + "%"); renderTwin(); saveWatch({battery: String(b[7])}); }
+    // watchface table reply (01 E3 AA 0B ...): records = version "1.0.0"(5) type(1) flag(1) id(3B)
+    if (b[1] === 0xe3 && b[2] === 0xaa && b[3] === 0x0b && b[4] !== 0xfd && b.length > 6) {
+      const ids = []; let i = 5; while (i + 10 <= b.length) { const id = hex(b.slice(i + 7, i + 10)).replace(/ /g, ""); if (/^[0-9a-f]{6}$/.test(id)) ids.push(id); i += 10; }
+      if (ids.length) { FACES = ids; renderFaces(); log("sys", "", [], "read " + ids.length + " installed faces from the watch"); }
+    }
+    if (b[1] === 0xef && (b[2] === 0xac) && (b[3] === 0x01 || b[3] === 0x02 || b[3] === 0x06)) { watchVoice(b); return; }
+    if (b[1] === 0xef && b[2] === 0xaa && b[3] === 0x02 && b.length >= 6) { VN.ai = !!b[5]; log("sys", "", [], "watch voice feature: " + (VN.ai ? "on" : "off")); if (current === "voice-notes") select("voice-notes"); }
+    // events the watch sends on its own
+    if (b[1] === 0xa5 && b[2] === 0xac && b[3] === 0x02 && b.length >= 6) findPhone(b[5] !== 0);                       // find-phone pressed on the watch
+    if (b[1] === 0xe2 && b[3] === 0x01 && b[4] === 0x02 && b.length >= 6 && MUSIC_BTN[b[5]]) musicButton(MUSIC_BTN[b[5]]);  // music screen button
+    if (b[1] === 0xe0 && b[2] === 0xac && b[3] === 0x02) { log("sys", "", [], "watch asked for weather — sending the Weather panel values"); write("34F1", F.weather({...S.wx, icon: 1})); }
+    if (b[1] === 0xc6 && b[2] === 0xac && b[3] === 0x02 && b.length >= 10) { S.stress = b[9]; rec("stress", b[9], "score", "push", num(b.slice(5, 9)) || undefined); renderTwin(); saveWatch({stress: String(b[9])}); }
+    if (b[1] === 0xe1 && b[2] === 0xac && b.length >= 6) log("sys", "", [], (b[3] === 7 ? "HR interval " + b[5] + " min" : b[3] === 12 ? "auto HR " + (b[5] ? "on" : "off") : "E1/" + hex([b[3]]) + " = " + b[5]));
+  }
+  // ---------- find-phone + music events ----------
+  let ringer = null;
+  function findPhone(on) {
+    $("hw-findphone").hidden = !on; log("sys", "", [], on ? "watch is looking for this device" : "watch stopped looking");
+    if (on && !ringer) { try { const ac = new (window.AudioContext || window.webkitAudioContext)(); let t = 0;
+      ringer = {ac, iv: setInterval(() => { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.value = t++ % 2 ? 880 : 1175; g.gain.value = 0.15; o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.25); }, 400)}; } catch (e) {} }
+    if (!on && ringer) { clearInterval(ringer.iv); ringer.ac.close(); ringer = null; }
+  }
+  async function musicButton(cmd) {
+    S.lastBtn = cmd + " · " + new Date().toLocaleTimeString([], {hour12: false}); log("sys", "", [], "watch music button: " + cmd);
+    if (cmd === "play") S.music.playing = true; if (cmd === "pause") S.music.playing = false;
+    if (cmd === "volup") S.music.vol = Math.min(S.music.vmax, S.music.vol + 1); if (cmd === "voldown") S.music.vol = Math.max(0, S.music.vol - 1);
+    const mac = $("ed-m-mac"); if (window.HT36_SERVICE === true && (!mac || mac.checked)) {
+      try { const j = await (await fetch(API + "media?cmd=" + cmd + "&app=" + encodeURIComponent(val("ed-m-app", "Music")), {method: "POST"})).json();
+        if (j.ok && j.now) { Object.assign(S.music, j.now); await write("34F1", F.music(S.music)); } else if (!j.ok) log("err", "", [], "Mac media: " + j.error); } catch (e) { log("err", "", [], "Mac media: " + e.message); } }
+    if (current === "music-control") select("music-control"); else renderTwin();
+  }
+  const timed = (p, ms, what) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error(what + " timed out after " + ms / 1000 + " s")), ms))]);
+  const OPT = {optionalServices: [SVC.info, SVC.jl, SVC.ute, SVC.ffd]};
+  let userClosed = false, retries = 0, attaching = false;
+  function watchDev(dev) {
+    if (C.dev === dev) return; C.dev = dev;
+    dev.addEventListener("gattserverdisconnected", () => {
+      log("sys", "", [], "disconnected"); enable(false); C.w34 = C.w35 = null;
+      if (!userClosed && retries < 5) { retries++; setState("Reconnecting (try " + retries + " of 5)…", "busy"); setTimeout(() => attach(dev), 2000 * retries); }
+      else setState("Disconnected");
+    });
+  }
+  async function attach(dev) {
+    if (attaching) return; attaching = true; watchDev(dev); userClosed = false;
+    try {
+      setState("Connecting…", "busy"); log("sys", "", [], "connecting to " + (dev.name || "watch"));
+      const gatt = await timed(dev.gatt.connect(), 20000, "GATT connect");
+      const ute = await timed(gatt.getPrimaryService(SVC.ute), 8000, "service 56FF"), jl = await timed(gatt.getPrimaryService(SVC.jl), 8000, "service 55FF");
+      C.w34 = await ute.getCharacteristic(UUID("34f1")); C.w35 = await jl.getCharacteristic(UUID("35f1"));
+      info("Name", dev.name || "HT36"); setState("Connected", "on"); enable(true); retries = 0;
+      try { localStorage.setItem("ht36-auto", "1"); } catch (e) {}
+      log("sys", "", [], "connected. The watch may show a spinner; its first stream packets can take about 20 s.");
+      await timed(sub(ute, UUID("34f2"), "34F2"), 8000, "subscribe 34F2").catch((e) => log("err", "34F2", [], e.message));
+      await timed(sub(jl, UUID("35f2"), "35F2"), 8000, "subscribe 35F2").catch((e) => log("err", "35F2", [], e.message));
+      try { const di = await timed(gatt.getPrimaryService(SVC.info), 5000, "service 180A"); const v = await (await di.getCharacteristic(0x2a24)).readValue(); S.model = new TextDecoder().decode(v); info("Model", S.model); } catch (err) { log("sys", "", [], "model read skipped: " + err.message); }
+      try { const ffd = await timed(gatt.getPrimaryService(SVC.ffd), 5000, "service FFD0"); await timed(sub(ffd, UUID("ffd2"), "FFD2"), 5000, "subscribe FFD2"); await timed(sub(ffd, UUID("ffd3"), "FFD3"), 5000, "subscribe FFD3"); } catch (err) { log("sys", "", [], "FFD0 skipped: " + err.message); }
+      await ACT.battery(); await sleep(400); await write("35F1", [[0xa1]]);
+    } catch (err) {
+      log("err", "", [], "connect: " + err.message); enable(false);
+      setState(/Bluetooth adapter|in use|busy/i.test(err.message) ? "Not connected (is another app or script holding the watch?)" : "Not connected");
+      try { if (dev.gatt.connected) dev.gatt.disconnect(); } catch (e) {}
+    } finally { attaching = false; }
+  }
+  async function connect() {
+    if (!navigator.bluetooth) { $("hw-nosupport").hidden = false; return; }
+    try { setState("Choose the watch…", "busy"); await attach(await navigator.bluetooth.requestDevice(Object.assign({filters: [{namePrefix: "HT36"}]}, OPT))); }
+    catch (err) { setState("Not connected"); log("err", "", [], "connect: " + err.message); }
+  }
+  async function autoConnect() {
+    if (!navigator.bluetooth || !navigator.bluetooth.getDevices) return;
+    try { if (localStorage.getItem("ht36-auto") === "0") return; } catch (e) {}
+    const devs = (await navigator.bluetooth.getDevices()).filter((d) => (d.name || "").startsWith("HT36"));
+    if (!devs.length) { log("sys", "", [], "auto-connect: no remembered watch yet; click Connect once"); return; }
+    const dev = devs[0]; setState("Looking for the watch…", "busy"); log("sys", "", [], "auto-connect: remembered " + dev.name + ", waiting for it to advertise");
+    if (dev.watchAdvertisements) {
+      const ac = new AbortController();
+      dev.addEventListener("advertisementreceived", () => { ac.abort(); attach(dev); }, {once: true});
+      try { await dev.watchAdvertisements({signal: ac.signal}); setTimeout(() => { if (!C.w34 && !attaching) { ac.abort(); attach(dev); } }, 10000); }
+      catch (err) { attach(dev); }
+    } else attach(dev);
+  }
+  async function write(ch, frames, gap = 150) {
+    const c = ch === "35F1" ? C.w35 : C.w34;
+    if (!c) { log("err", ch, [], "not connected"); return false; }
+    for (const f of frames) {
+      const u8 = new Uint8Array(f);
+      try { ch === "35F1" ? await c.writeValueWithResponse(u8) : await c.writeValueWithoutResponse(u8); log("tx", ch, u8); }
+      catch (err) { log("err", ch, u8, "write failed: " + err.message); return false; }
+      await sleep(gap);
+    }
+    return true;
+  }
+  const pages = (text, n) => { const out = []; let rest = text.trim(); while (rest.length) { let cut = rest.length <= n ? rest.length : rest.lastIndexOf(" ", n);
+    if (cut <= 0) cut = n; out.push(rest.slice(0, cut).trim()); rest = rest.slice(cut).trim(); } return out; };
+  async function notify(title, text) {
+    if (!(await write("34F1", F.notifOn()))) return;
+    await sleep(300);
+    const all = pages(text, Math.max(20, +($("ed-chat-page") || {}).value || 90));
+    for (let i = 0; i < all.length; i++) { await write("34F1", F.notify(all.length > 1 ? title + " " + (i + 1) + "/" + all.length : title, all[i])); await sleep(900); }
+    S.msg = (title ? title + ": " : "") + text; renderTwin();
+  }
+  const val = (id, d) => { const el = $(id); return el ? el.value : d; };
+  const on = (id) => { const el = $(id); return !!(el && el.checked); };
+  const w = (frames) => write("34F1", frames);
+  const ACT = {
+    face: () => { S.msg = val("ed-face-line", ""); renderTwin(); return notify("Status", val("ed-face-line", "")); },
+    chat: () => notify(val("ed-chat-title", "Assistant"), val("ed-chat-body", "")),
+    weather: () => { S.wx = {city: val("ed-w-city", "Home"), cur: +val("ed-w-cur", 8), hi: +val("ed-w-hi", 11), lo: +val("ed-w-lo", 2), unit: +val("ed-w-unit", 0)}; renderTwin();
+      return w(F.weather({...S.wx, icon: +val("ed-w-icon", 1)})); },
+    battery: () => w(F.battery()),
+    info: () => w(F.info()),
+    vibrate: () => w(F.vibrate()),
+    vibrateStop: () => w(F.vibrateStop()),
+    findPhone: () => w(F.findPhone()),
+    findWear: () => w(F.findWear()),
+    config: () => w(F.config()),
+    languages: () => w(F.languages()),
+    today: () => w(F.today()),
+    hrQuery: () => w(F.hrQuery()),
+    hrAuto: () => w(F.hrAuto(+val("ed-hr-min", 10))),
+    hrAlerts: () => w(F.hrAlerts(on("ed-hr-hion"), +val("ed-hr-hi", 150), on("ed-hr-loon"), +val("ed-hr-lo", 45))),
+    spo2Query: () => w(F.spo2Query()),
+    spo2On: () => w(F.spo2Auto(true)),
+    spo2Off: () => w(F.spo2Auto(false)),
+    spo2Alert: () => w(F.spo2Alert(on("ed-sp-on"), +val("ed-sp-lo", 90))),
+    stress: () => w(F.stress(on("ed-st-on"), +val("ed-st-min", 30))),
+    moodOn: () => w(F.mood(true)),
+    moodOff: () => w(F.mood(false)),
+    alarms: () => w(F.alarms()),
+    alarmAdd: () => { S.alarms = [...(S.alarms ? alarmsFromForm() : []), {on: true, h: 7, m: 0, days: 62}]; select("alarms"); },
+    alarmDel: (b) => { const l = alarmsFromForm(); l.splice(+b.dataset.i, 1); S.alarms = l; select("alarms"); },
+    alarmsWrite: async () => { const l = alarmsFromForm(); S.alarms = l; renderTwin(); if (await w(F.alarmsSet(l))) { await sleep(800); await w(F.alarms()); } },
+    music: () => { Object.assign(S.music, {artist: val("ed-m-artist", ""), title: val("ed-m-title", ""), playing: on("ed-m-play"), vol: +val("ed-m-vol", 8)}); renderTwin(); return w(F.music(S.music)); },
+    musicNow: async () => { if (window.HT36_SERVICE !== true) { log("err", "", [], "Mac media needs the Control-Page service"); return; }
+      const j = await (await fetch(API + "media?app=" + encodeURIComponent(val("ed-m-app", "Music")))).json();
+      if (j.ok && j.now) { Object.assign(S.music, j.now); select("music-control"); } else log("err", "", [], "Mac media: " + (j.error || "nothing playing")); },
+    contacts: () => w(F.contacts(val("ed-contacts", "").split("\n").map((l) => l.split(",")).filter((p) => p.length >= 2).map(([name, n]) => ({name: name.trim(), num: n.trim()})))),
+    callOn: () => w(F.callAlerts(true)), callOff: () => w(F.callAlerts(false)),
+    smsOn: () => w(F.smsAlerts(true)), smsOff: () => w(F.smsAlerts(false)),
+    dnd: () => { const m = +val("ed-dnd-mode", 0); S.dnd = ["Off", "All day", "Scheduled " + val("ed-dnd-from", "") + "–" + val("ed-dnd-to", "")][m]; renderTwin();
+      return w(F.dnd(m, val("ed-dnd-from", "22:00"), val("ed-dnd-to", "07:00"), on("ed-dnd-novib"), on("ed-dnd-nomsg"))); },
+    sedentary: () => w(F.sedentary(on("ed-sed-on"), +val("ed-sed-int", 60), val("ed-sed-from", "09:00"), val("ed-sed-to", "21:00"))),
+    water: () => w(F.water(on("ed-wat-on"), +val("ed-wat-int", 90), val("ed-wat-from", "09:00"), val("ed-wat-to", "21:00"))),
+    goals: () => w(F.goals(+val("ed-go-steps", 8000), +val("ed-go-kcal", 400), +val("ed-go-km", 5), +val("ed-go-min", 30))),
+    profile: () => w(F.profile({year: +val("ed-pf-y", 1975), month: +val("ed-pf-m", 1), day: +val("ed-pf-d", 1), height: +val("ed-pf-h", 178), weight: +val("ed-pf-w", 80), male: on("ed-pf-male"), left: on("ed-pf-left")})),
+    raise: () => w(F.raiseWake(on("ed-s-raise"))),
+    disc: () => w(F.disconnectAlert(on("ed-s-disc"))),
+    screenTo: () => w(F.screenTimeout(+val("ed-s-to", 15))),
+    timeFmt: () => w(F.timeFormat(val("ed-s-24", "1") === "1")),
+    units: async () => { await w(F.lengthUnit(val("ed-s-len", "0") === "1")); await sleep(300); await w(F.weightUnit(val("ed-s-wt", "0") === "1")); await sleep(300); return w(F.tempUnit(val("ed-s-tmp", "0") === "1")); },
+    lang: () => w(F.language(+val("ed-s-lang", 0))),
+    faceInfo: () => w(F.faceInfo()),
+    faceTable: () => w(F.faceTable()),
+    gnss: () => w(F.gnss()),
+    gps: () => { rec("gps_push", 0, "", "push", undefined, {lat: +val("ed-g-lat", 0), lon: +val("ed-g-lon", 0)}); return w(F.gps(+val("ed-g-lat", 0), +val("ed-g-lon", 0))); },
+    gpshere: () => navigator.geolocation ? navigator.geolocation.getCurrentPosition((p) => { if ($("ed-g-lat")) $("ed-g-lat").value = p.coords.latitude.toFixed(6); if ($("ed-g-lon")) $("ed-g-lon").value = p.coords.longitude.toFixed(6); },
+      (err) => log("err", "", [], "location: " + err.message)) : log("err", "", [], "no location in this browser"),
+    settime: () => w(F.setTime()),
+    trkRecord: () => trackRecord(),
+    trkImport: () => $("trk-file").click(),
+    trkRename: async (b) => { await fetch(API + "track/update?id=" + b.dataset.i, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({name: val("trk-name", "")})}); loadTracks(); },
+    trkDelete: (b) => twoStep(b, async () => { await fetch(API + "track/delete?id=" + b.dataset.i, {method: "POST"}); TR.open = null; loadTracks(); }),
+    vnRecord: () => voiceRecord(),
+    vnRename: async (b) => { await fetch(API + "voice/update?id=" + b.dataset.i, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({title: val("vn-title", "")})}); loadNotes(); },
+    vnDelete: (b) => twoStep(b, async () => { await fetch(API + "voice/delete?id=" + b.dataset.i, {method: "POST"}); VN.open = null; loadNotes(); }),
+    aiQuery: () => w(F.aiQuery()),
+    aiOn: () => w(F.aiEnable(true)),
+    notifon: () => w(F.notifOn()),
+  };
+  // local-only actions (no watch needed)
+  const LOCAL = new Set(["alarmAdd", "alarmDel", "musicNow", "trkRecord", "trkImport", "trkRename", "trkDelete", "vnRecord", "vnRename", "vnDelete"]);
+  document.addEventListener("change", (ev) => { if (ev.target.id === "trk-file" && ev.target.files.length) importGpx(Array.from(ev.target.files)); });
+  const twoStep = (b, run) => { if (b.dataset.armed) return run(); b.dataset.armed = "1"; b.textContent = "Click again to delete"; setTimeout(() => { delete b.dataset.armed; if (b.isConnected) b.textContent = "Delete…"; }, 4000); };
+  // delegate app-panel + lab button clicks
+  document.addEventListener("click", async (ev) => {
+    const fl = ev.target.closest("[data-trkf],[data-vnf]");
+    if (fl) { if (fl.dataset.trkf !== undefined) { TR.filter = fl.dataset.trkf; select("gps-tracks"); } else { VN.filter = fl.dataset.vnf; select("voice-notes"); } return; }
+    const lk = ev.target.closest("[data-go]"); if (lk) { ev.preventDefault(); select(lk.dataset.go); go(lk.dataset.go); return; }
+    const v = ev.target.closest("[data-verify]");
+    if (v) { const k = v.dataset.verify, res = v.dataset.ok === "1" ? "works" : "fails"; VER[k] = res; saveWatch({["verify:" + k]: res + " " + new Date().toISOString()});
+      log("sys", "", [], "verify " + k + ": " + res); const pill = v.parentElement.querySelector(".hw-pill"); if (pill) { pill.className = "hw-pill " + (res === "works" ? "ok" : "no"); pill.textContent = res; } return; }
+    const b = ev.target.closest("[data-act]"); if (!b) return;
+    if (!ACT[b.dataset.act]) { log("err", "", [], "no action " + b.dataset.act); return; }
+    if (!LOCAL.has(b.dataset.act) && !C.w34) { log("err", "", [], b.dataset.act + ": connect the watch first"); return; }
+    if (C.busy) return; C.busy = true; b.disabled = true;
+    try { await ACT[b.dataset.act](b); } catch (err) { log("err", "", [], b.dataset.act + ": " + err.message); }
+    finally { C.busy = false; b.disabled = false; }
+  });
+
+  // ---------- last-known from the service DB ----------
+  function saveWatch(obj) { if (window.HT36_SERVICE === true) fetch(API + "watch", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(obj)}).catch(() => {}); }
+  // ---------- metrics: every reading goes to the service DB (docs/07-testing-plan-and-log.md) ----------
+  let MQ = [], mTimer = null, mCount = 0;
+  function rec(metric, value, unit, kind, ts, extra) {
+    if (value === undefined || value === null || value === "–" || Number.isNaN(+value)) return;
+    MQ.push({ts: ts || Date.now() / 1000, metric, value: +value, unit, kind: kind || "live", source: "ht36", trial: val("rec-trial", "").trim(), extra});
+    if (!mTimer) mTimer = setTimeout(flushMetrics, 1500);
+  }
+  async function flushMetrics() {
+    mTimer = null; if (!MQ.length || window.HT36_SERVICE !== true) { MQ = []; return; }
+    const batch = MQ; MQ = [];
+    try { const j = await (await fetch(API + "metrics", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(batch)})).json();
+      if (j.ok) { mCount += j.stored; const m = $("rec-msg"); if (m) m.textContent = mCount + " readings stored this session · last " + new Date().toLocaleTimeString([], {hour12: false}); if (byslug[current] && byslug[current].metrics) showLogged(); } }
+    catch (e) { MQ = batch.concat(MQ); log("err", "", [], "metrics save failed: " + e.message); }
+  }
+  async function showLogged() {
+    const a = byslug[current], box = $("mx-log"); if (!a || !a.metrics || !box || window.HT36_SERVICE !== true) return;
+    const q = "metric=" + a.metrics.join(",");
+    try { const rows = (await (await fetch(API + "metrics?" + q + "&limit=25")).json()).metrics || [];
+      box.innerHTML = `<h3 class="hw-sub">Logged readings <span class="hw-note">(${a.metrics.join(", ")})</span> · <a href="${API}metrics.csv?${q}" style="color:var(--acc)">download CSV</a></h3>` +
+        (rows.length ? `<div class="hw-log" style="max-height:260px"><table><thead><tr><th>Time</th><th>Metric</th><th>Value</th><th>Source</th><th>Kind</th><th>Test</th></tr></thead><tbody>${rows.map((r) =>
+          `<tr><td>${new Date(r.ts * 1000).toLocaleString([], {hour12: false})}</td><td>${esc(r.metric)}</td><td>${r.value === null ? esc(r.extra || "") : r.value + " " + esc(r.unit || "")}</td><td>${esc(r.source)}</td><td>${esc(r.kind || "")}</td><td>${esc(r.trial || "")}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="hw-note">No readings stored yet. Connect the watch; polling and every reply are logged automatically.</p>`);
+    } catch (e) {}
+  }
+  let pollT = null, pollEvery = -1;
+  setInterval(() => {   // re-arm the poll when the interval box changes
+    const m = Math.max(0, +val("rec-every", 1) || 0); if (m === pollEvery) return; pollEvery = m; clearInterval(pollT); pollT = null;
+    if (m > 0) pollT = setInterval(async () => { if (!C.w34 || C.busy) return; C.busy = true;
+      try { await write("34F1", F.today()); await sleep(1500); await write("34F1", F.battery()); } finally { C.busy = false; }
+      if ($("rec-loc") && $("rec-loc").checked && navigator.geolocation) navigator.geolocation.getCurrentPosition((pos) => rec("gps", pos.coords.accuracy, "m accuracy", "reference", pos.timestamp / 1000,
+        {lat: pos.coords.latitude, lon: pos.coords.longitude, alt: pos.coords.altitude, source: "browser"}), () => {});
+    }, m * 60000);
+  }, 2000);
+  async function loadWatch() {
+    if (window.HT36_SERVICE !== true) return;
+    try { const j = await (await fetch(API + "watch")).json(); const wv = j.watch || {}, g = (k) => wv[k] && wv[k].value;
+      if (g("battery")) { S.batt = g("battery"); info("Battery", S.batt + "%"); }
+      if (g("firmware")) { S.fw = g("firmware"); info("Firmware", S.fw); }
+      if (g("model")) { S.model = g("model"); info("Model", S.model); }
+      ["steps", "hr", "kcal", "dist", "stress"].forEach((k) => { if (g(k)) S[k] = g(k); });
+      if (g("settings")) try { S.cfg = JSON.parse(g("settings")); } catch (e) {}
+      Object.keys(wv).filter((k) => k.startsWith("verify:")).forEach((k) => VER[k.slice(7)] = String(wv[k].value).split(" ")[0]);
+      select(current);
+    } catch (e) {}
+  }
+
+  // ---------- wiring ----------
+  $("hw-connect").onclick = connect;
+  $("hw-sweep").onclick = sweep;
+  $("hw-disconnect").onclick = () => { userClosed = true; try { localStorage.setItem("ht36-auto", "0"); } catch (e) {} if (C.dev && C.dev.gatt.connected) C.dev.gatt.disconnect(); else setState("Disconnected"); };
+  $("hw-refresh").onclick = async () => { await ACT.battery(); await sleep(400); await write("35F1", [[0xa1]]); };
+  $("lab-send").onclick = async () => {
+    const bytes = $("lab-hex").value.trim().split(/[\s,]+/).filter(Boolean).map((x) => parseInt(x, 16));
+    if (!bytes.length || bytes.some((x) => isNaN(x) || x < 0 || x > 255)) { log("err", "", [], "Lab: bytes must be hex 00 to ff, separated by spaces"); return; }
+    if ($("lab-x").value === "1") bytes.push(xor8(bytes));
+    await write($("lab-ch").value === "35f1" ? "35F1" : "34F1", [bytes]);
+  };
+  $("hw-findphone-stop").onclick = () => findPhone(false);
+  // ---------- URLs: every tab and app has its own address ----------
+  // Service: /heart-rate, /bluetooth-log, /lab (real paths). Console copy (HT36 Control): #heart-rate etc. (hash).
+  const PATHED = window.HT36_SERVICE === true, PANE_URL = {log: "bluetooth-log", lab: "lab"};
+  function showPane(pane) {
+    document.querySelectorAll(".hw-tabs [role=tab]").forEach((x) => x.setAttribute("aria-selected", x.dataset.pane === pane));
+    document.querySelectorAll(".hw-pane").forEach((p) => p.hidden = p.id !== "pane-" + pane);
+    if (pane === "log") redraw();
+  }
+  const urlOf = (slug) => (byslug[slug] && byslug[slug].path) || slug;
+  function go(slug) {
+    const u = urlOf(slug);
+    if (PATHED) { if (location.pathname !== "/" + u) history.pushState(null, "", "/" + u); } else if (location.hash !== "#" + u) history.pushState(null, "", "#" + u);
+    document.title = "HT36 · " + (byslug[slug] ? byslug[slug].name : slug === "bluetooth-log" ? "Bluetooth log" : "Lab");
+  }
+  function route() {
+    const p = decodeURIComponent((PATHED ? location.pathname : location.hash).replace(/^[\/#]+/, ""));
+    const pane = p === "bluetooth-log" || p === "log" ? "log" : p === "lab" ? "lab" : "screens";
+    showPane(pane);
+    const bypath = APPS.find((a) => a.path === p);
+    if (pane === "screens") select(bypath ? bypath.slug : byslug[p] ? p : current);
+  }
+  document.querySelectorAll(".hw-tabs [role=tab]").forEach((t) => t.addEventListener("click", () => { showPane(t.dataset.pane); go(PANE_URL[t.dataset.pane] || current); }));
+  window.addEventListener("popstate", route);
+  setInterval(() => { if (current === "watch-faces" || current === "settings") renderTwin(); }, 10000);
+
+  buildNav(); route(); loadWatch();
+  if (!navigator.bluetooth) $("hw-nosupport").hidden = false; else autoConnect().catch((err) => log("err", "", [], "auto-connect: " + err.message));
+})();
+</script>
