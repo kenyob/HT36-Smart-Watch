@@ -184,6 +184,14 @@ watch-face-pages/    one page per watch app and installed face (notes + replica 
 Skills/              REAP reverse-engineering workflows (MIT, see Skills/REAP-LICENSE)
 ```
 
+## Discussion
+
+- [r/ReverseEngineering](https://www.reddit.com/r/ReverseEngineering/comments/1xzmxpp/mapping_a_cheap_gps_smartwatchs_ble_protocol_from/): how the protocol was mapped
+- [r/Gadgetbridge](https://www.reddit.com/r/Gadgetbridge/comments/1xzmzcb/gloryfitpro_ats3085_jx_protocol_notes_that_may/): GloryFitPro protocol notes for the open-source Android app
+- [r/smartwatch](https://www.reddit.com/r/smartwatch/comments/1xzmynq/opensource_web_app_to_control_a_cheap_ht36_gps/): for owners of the watch
+
+Bugs, watch reports and code go in [GitHub issues](../../issues) and pull requests.
+
 ## Credits: code and tools from other projects
 
 This project stands on other people's work. Everything we pulled in, ported, analysed or ran is listed here.
