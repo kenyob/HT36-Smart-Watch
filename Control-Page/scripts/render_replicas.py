@@ -12,16 +12,18 @@ Illustrative values (steps, HR, weather) are placeholders.
 
 import subprocess
 import sys
+import os
 import tempfile
 from pathlib import Path
 
 PAGES = Path(__file__).resolve().parents[2] / "watch-face-pages"
 W, H = 240, 296
 
-CHROME_CANDIDATES = [
-    "/Volumes/HomeX/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+CHROME_CANDIDATES = [p for p in (
+    os.environ.get("CHROME_PATH"),  # set it in ../.env (or the shell) if Chrome lives somewhere else
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-]
+    "/usr/bin/google-chrome", "/usr/bin/chromium",
+) if p]
 
 SHELL = """<!doctype html><html><head><meta charset="utf-8"><style>
 *{{margin:0;box-sizing:border-box}}
