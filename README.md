@@ -19,12 +19,47 @@ the watch collects (steps, heart rate, SpO₂, stress, GPS tracks, voice) stays 
 | | |
 |---|---|
 | Model | "HT36" GPS smartwatch, sold under several brands. Bluetooth name `HT36`, MAC prefix `78:02:B7` |
+| Where to get it | The unit this project uses: [Amazon B0FDGPTYJN](https://www.amazon.com/dp/B0FDGPTYJN) (also sold on Alibaba as "HT36 … ATS3085L … GloryFitPro") |
 | Firmware | `AT364DV003105` (Actions ATS3085-family SoC; vendor SDK "JX platform") |
 | Screen | 2.01" LCD, 240 × 296 |
 | GNSS | GPS + BeiDou + Galileo (as reported by the watch) |
 | Sensors | heart rate, SpO₂, accelerometer; mic and speaker for Bluetooth calling |
 | Radios | BLE (this project) plus a separate classic-Bluetooth radio used only for call audio |
 | Vendor apps | **GloryFitPro** (`com.yc.gloryfitpro`, SDK `com.yc.nadalsdk`) and the community app **WatchLink** |
+
+## Other watches that should work (not yet confirmed)
+
+The web app speaks the protocol of GloryFitPro watches built on the **Actions ATS3085 ("JX") platform**. Other
+watches on that platform should work too, but **none of these has been tested with this project yet**. If you own
+one, please [open a "Watch report" issue](../../issues/new?template=watch-report.md): connect, click
+**Log all Bluetooth info**, and attach the firmware string and the log.
+
+**Likely.** Same firmware family, or direct protocol evidence:
+
+| Watch | Evidence | Confidence |
+|---|---|---|
+| **HT36** (this one: firmware `AT364D…`, sold under several brand names) | Tested here | ✅ works (partly verified) |
+| **P131** (firmware `AT364C` / `AT364CD`) | WatchLink is written for it, and its frames match ours byte for byte (`docs/05`) | likely |
+| Any watch whose firmware string (Settings → About, or the page's Firmware field) starts with **`AT364`** | Same firmware line as the HT36 | likely |
+| **DM58** (brandless GPS watch, GloryFitPro) | Gadgetbridge's GloryFitPro support is built against it; same app and SDK | likely |
+| **DM76** (GPS watch, GloryFitPro) | Same app; seller listings say ATS3085-class | likely |
+| **AT338 / AT338V** firmware | Named inside the GloryFitPro watch SDK (`jx/q3`) as JX-platform products | likely |
+
+**Possible.** GloryFitPro watches whose chip we haven't confirmed:
+
+| Watch | Why it might work | Caveat |
+|---|---|---|
+| ChiBear **MK68-015**, HELLO-WATCH | XDA's GloryFitPro watch-face tools; reported ATS3085P | different screen size, so faces won't fit |
+| **AT325**, Blackview **W60**, Zeblaze **Stratos 2**, Aolon **Mars R3**, "Glory Fit Pro" **W10 Pro**, **VG53 Pro** | Listed by sellers or app aggregators as GloryFitPro watches | could be on another chip platform |
+
+**Probably not.** These use a different protocol:
+- watches on the older **GloryFit** app (not *Pro*), such as the Q18 series
+- GloryFitPro watches on the **JieLi AC701** or **"RK"** platforms (for example firmware `AT396C`). The SDK
+  handles those through separate code paths.
+
+How to tell: GloryFitPro identifies the platform from two plain Bluetooth reads that change nothing on the watch
+([issue #2](../../issues/2) adds them to the page). Until then, a firmware string starting `AT3…` plus a working
+**Log all Bluetooth info** sweep is a good sign.
 
 ## Quick start
 
